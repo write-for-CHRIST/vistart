@@ -19,10 +19,10 @@
     "enter:web": "yarn exec:web /bin/sh",
     "restart:graph": "docker-compose restart server_graph",
     "restart:web": "docker-compose restart client_web",
-    "add:graph": "docker-compose run --rm --no-deps yarn add",
-    "add:web": "docker-compose run --rm --no-deps yarn add",
-    "remove:graph": "docker-compose run --rm --no-deps yarn remove",
-    "remove:web": "docker-compose run --rm --no-deps yarn remove"
+    "add:graph": "docker-compose run --rm --no-deps server_graph yarn add",
+    "add:web": "docker-compose run --rm --no-deps client_web yarn add",
+    "remove:graph": "docker-compose run --rm --no-deps server_graph yarn remove",
+    "remove:web": "docker-compose run --rm --no-deps client_web yarn remove"
   },
   "devDependencies": {
     "node-env-run": "^3.0.2"

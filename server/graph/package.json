@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "scripts": {
     "start": "yarn start:dev",
-    "start:dev": "nodemon -e ts,graphql -x ts-node src/index.ts",
+    "start:dev": "run-p tsserver playground",
     "start:prod": "ts-node src/index.ts",
+    "tsserver": "nodemon -e ts,graphql -x ts-node src/index.ts",
     "dev": "npm-run-all --parallel start playground",
     "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
     "playground": "graphql playground --server-only --port 4001",
@@ -13,11 +14,13 @@
   "dependencies": {
     "bcryptjs": "2.4.3",
     "graphql-yoga": "1.14.0",
+    "http-proxy": "^1.17.0",
     "jsonwebtoken": "8.2.1",
     "prisma-binding": "1.5.19"
   },
   "devDependencies": {
     "@types/bcryptjs": "2.4.1",
+    "@types/http-proxy": "^1.16.1",
     "dotenv-cli": "1.4.0",
     "graphql-cli": "2.16.0",
     "nodemon": "1.17.4",

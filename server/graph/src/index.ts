@@ -1,5 +1,6 @@
 import { GraphQLServer } from 'graphql-yoga'
 import { Prisma } from './generated/prisma'
+import {startProxyServer} from './proxy'
 import resolvers from './resolvers'
 
 const server = new GraphQLServer({
@@ -8,10 +9,13 @@ const server = new GraphQLServer({
   context: req => ({
     ...req,
     db: new Prisma({
-      endpoint: process.env.PRISMA_ENDPOINT, // the endpoint of the Prisma API (value set in `.env`)
+      endpoint: process.env.PRISMA_ENDPOINT, // the endpoint of the Prisma API (value set in `envs/graph.env`)
       debug: true, // log all GraphQL queries & mutations sent to the Prisma API
-      // secret: process.env.PRISMA_SECRET, // only needed if specified in `database/prisma.yml` (value set in `.env`)
+      // secret: process.env.PRISMA_SECRET, // only needed if specified in `database/prisma.yml` (value set in `envs/graph.env`)
     }),
   }),
 })
-server.start(() => console.log(`Server is running on http://localhost:4000`))
+
+startProxyServer().then(() => {
+  server.start(() => console.log(`Server is running on http://localhost:4000`))
+})
