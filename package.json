@@ -22,7 +22,8 @@
     "add:graph": "docker-compose run --rm --no-deps server_graph yarn add",
     "add:web": "docker-compose run --rm --no-deps client_web yarn add",
     "remove:graph": "docker-compose run --rm --no-deps server_graph yarn remove",
-    "remove:web": "docker-compose run --rm --no-deps client_web yarn remove"
+    "remove:web": "docker-compose run --rm --no-deps client_web yarn remove",
+    "deploy:graph": "nodenv -E ./envs/graph.env -e 'cd server/graph && prisma deploy'"
   },
   "devDependencies": {
     "node-env-run": "^3.0.2"
