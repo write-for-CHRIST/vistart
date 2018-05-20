@@ -47,6 +47,9 @@ services:
       context: server/graph
       args:
         NODE_ENV: development
+    ports:
+      - 4000:4000
+      - 4001:4001
     volumes:
       - yarn:/home/node/.cache/yarn
       - ./server/graph:/graph

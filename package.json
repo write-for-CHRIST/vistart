@@ -23,5 +23,8 @@
     "add:web": "docker-compose run --rm --no-deps yarn add",
     "remove:graph": "docker-compose run --rm --no-deps yarn remove",
     "remove:web": "docker-compose run --rm --no-deps yarn remove"
+  },
+  "devDependencies": {
+    "node-env-run": "^3.0.2"
   }
 }
