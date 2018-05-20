@@ -1,0 +1,27 @@
+{
+  "name": "vistart",
+  "version": "1.0.0",
+  "description": "vistart - Fullstack application from back-end to front-end, from development to production",
+  "main": "index.js",
+  "repository": "https://github.com/write-for-CHRIST/vistart.git",
+  "author": "Nam Pham <nampdn@protonmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "chmod": "chmod +x ./tools/*.sh",
+    "preinstall": "yarn chmod && ./tools/init.sh",
+    "build": "nodenv -E ./envs/build.env -e 'docker-compose build'",
+    "start": "docker-compose up",
+    "down": "docker-compose down",
+    "exec:graph": "docker-compose exec server_graph",
+    "exec:web": "docker-compose exec client_web",
+    "enter:graph": "yarn exec:graph /bin/sh",
+    "enter:web": "yarn exec:web /bin/sh",
+    "restart:graph": "docker-compose restart server_graph",
+    "restart:web": "docker-compose restart client_web",
+    "add:graph": "docker-compose run --rm --no-deps yarn add",
+    "add:web": "docker-compose run --rm --no-deps yarn add",
+    "remove:graph": "docker-compose run --rm --no-deps yarn remove",
+    "remove:web": "docker-compose run --rm --no-deps yarn remove"
+  }
+}
