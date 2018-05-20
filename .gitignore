@@ -1,0 +1,12 @@
+# Common
+node_modules
+.expo
+envs/*.env
+*error.log
+.DS_Store
+
+# Tools
+server/**/yarn.js
+client/**/yarn.js
+server/**/npm.js
+client/**/npm.js
