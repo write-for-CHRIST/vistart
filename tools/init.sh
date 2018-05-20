@@ -26,23 +26,23 @@ else
   echo "Copied file: "$build_env_file;
 fi;
 
-if [ -f $build_share_file ]; then
-  echo "$build_share_file file already existed, skip copy!";
+if [ -f $share_env_file ]; then
+  echo "$share_env_file file already existed, skip copy!";
 else
-  cp ./envs/share.env.sample share.env;
-  echo "Copied file: "$container_env_file;
+  cp ./envs/share.env.sample $share_env_file;
+  echo "Copied file: "$share_env_file;
 fi;
 
 if [ -f $graph_env_file ]; then
   echo "$graph_env_file file already existed, skip copy!";
 else
-  cp ./envs/graph.env.sample graph.env;
+  cp ./envs/graph.env.sample $graph_env_file;
   echo "Copied file: "$graph_env_file;
 fi;
 
 if [ -f $web_env_file ]; then
   echo "$web_env_file file already existed, skip copy!";
 else
-  cp ./envs/web.env.sample web.env;
+  cp ./envs/web.env.sample $web_env_file;
   echo "Copied file: "$web_env_file;
 fi;
