@@ -26,7 +26,8 @@
     "remove:web": "docker-compose run --rm --no-deps client_web yarn remove",
     "test:graph": "echo \"Not yet implemented test for server_graph\"",
     "test:web": "docker-compose run client_web yarn && cd client/web && yarn test",
-    "deploy:graph": "nodenv -E ./envs/graph.env -e 'cd server/graph && prisma deploy'"
+    "deploy:graph": "nodenv -E ./envs/graph.env -e 'cd server/graph && prisma deploy'",
+    "reset:graph": "nodenv -E ./envs/graph.env -e 'cd server/graph && prisma reset'"
   },
   "devDependencies": {
     "node-env-run": "^3.0.2",
