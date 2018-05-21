@@ -18,7 +18,6 @@ install:
 script:
   - yarn
   - yarn build
-  - yarn deploy:graph
 
 notifications:
   email: false
