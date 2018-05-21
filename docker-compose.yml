@@ -26,6 +26,17 @@ services:
             migrations: true
     depends_on:
       - mysql
+  client_core:
+    build:
+      context: client/ccore
+      args:
+        NODE_ENV: test
+    volumes:
+      - yarn:/home/node/.cache/yarn
+      - ./client/ccore:/ccore
+      - ./client/ccore/package.json:/ccore/package.json
+      - ./client/ccore/yarn.lock:/ccore/yarn.lock
+      - ./tools/yarn.js:/ccore/yarn.js
   client_web:
     build:
       context: client/web
