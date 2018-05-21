@@ -13,6 +13,7 @@
     "build": "nodenv -E ./envs/build.env -e 'docker-compose build'",
     "start": "docker-compose up",
     "down": "docker-compose down",
+    "test": "run-p test:graph test:web",
     "exec:graph": "docker-compose exec server_graph",
     "exec:web": "docker-compose exec client_web",
     "enter:graph": "yarn exec:graph /bin/sh",
@@ -23,9 +24,12 @@
     "add:web": "docker-compose run --rm --no-deps client_web yarn add",
     "remove:graph": "docker-compose run --rm --no-deps server_graph yarn remove",
     "remove:web": "docker-compose run --rm --no-deps client_web yarn remove",
+    "test:graph": "echo \"Not yet implemented test for server_graph\"",
+    "test:web": "docker-compose run client_web yarn && cd client/web && yarn test",
     "deploy:graph": "nodenv -E ./envs/graph.env -e 'cd server/graph && prisma deploy'"
   },
   "devDependencies": {
-    "node-env-run": "^3.0.2"
+    "node-env-run": "^3.0.2",
+    "npm-run-all": "^4.1.3"
   }
 }

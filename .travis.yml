@@ -18,6 +18,7 @@ install:
 script:
   - yarn
   - yarn build
+  - yarn test
 
 notifications:
   email: false
