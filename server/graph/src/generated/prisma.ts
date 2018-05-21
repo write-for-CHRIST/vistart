@@ -6,6 +6,10 @@ type AggregatePost {
   count: Int!
 }
 
+type AggregateProfile {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -458,11 +462,451 @@ input PostWhereUniqueInput {
   id: ID
 }
 
+type Profile implements Node {
+  id: ID!
+  name: String
+  gender: String
+  location: String
+  picture: String
+  user(where: UserWhereInput): User!
+}
+
+"""
+A connection to a list of items.
+"""
+type ProfileConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [ProfileEdge]!
+  aggregate: AggregateProfile!
+}
+
+input ProfileCreateInput {
+  name: String
+  gender: String
+  location: String
+  picture: String
+  user: UserCreateOneWithoutProfileInput!
+}
+
+input ProfileCreateOneWithoutUserInput {
+  create: ProfileCreateWithoutUserInput
+  connect: ProfileWhereUniqueInput
+}
+
+input ProfileCreateWithoutUserInput {
+  name: String
+  gender: String
+  location: String
+  picture: String
+}
+
+"""
+An edge in a connection.
+"""
+type ProfileEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Profile!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum ProfileOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  gender_ASC
+  gender_DESC
+  location_ASC
+  location_DESC
+  picture_ASC
+  picture_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ProfilePreviousValues {
+  id: ID!
+  name: String
+  gender: String
+  location: String
+  picture: String
+}
+
+type ProfileSubscriptionPayload {
+  mutation: MutationType!
+  node: Profile
+  updatedFields: [String!]
+  previousValues: ProfilePreviousValues
+}
+
+input ProfileSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [ProfileSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [ProfileSubscriptionWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [ProfileSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ProfileWhereInput
+}
+
+input ProfileUpdateInput {
+  name: String
+  gender: String
+  location: String
+  picture: String
+  user: UserUpdateOneWithoutProfileInput
+}
+
+input ProfileUpdateOneWithoutUserInput {
+  create: ProfileCreateWithoutUserInput
+  connect: ProfileWhereUniqueInput
+  delete: Boolean
+  update: ProfileUpdateWithoutUserDataInput
+  upsert: ProfileUpsertWithoutUserInput
+}
+
+input ProfileUpdateWithoutUserDataInput {
+  name: String
+  gender: String
+  location: String
+  picture: String
+}
+
+input ProfileUpsertWithoutUserInput {
+  update: ProfileUpdateWithoutUserDataInput!
+  create: ProfileCreateWithoutUserInput!
+}
+
+input ProfileWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [ProfileWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [ProfileWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [ProfileWhereInput!]
+  id: ID
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  name: String
+  """
+  All values that are not equal to given value.
+  """
+  name_not: String
+  """
+  All values that are contained in given list.
+  """
+  name_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  name_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  name_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  name_lte: String
+  """
+  All values greater than the given value.
+  """
+  name_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  name_gte: String
+  """
+  All values containing the given string.
+  """
+  name_contains: String
+  """
+  All values not containing the given string.
+  """
+  name_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  name_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  name_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  name_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  name_not_ends_with: String
+  gender: String
+  """
+  All values that are not equal to given value.
+  """
+  gender_not: String
+  """
+  All values that are contained in given list.
+  """
+  gender_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  gender_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  gender_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  gender_lte: String
+  """
+  All values greater than the given value.
+  """
+  gender_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  gender_gte: String
+  """
+  All values containing the given string.
+  """
+  gender_contains: String
+  """
+  All values not containing the given string.
+  """
+  gender_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  gender_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  gender_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  gender_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  gender_not_ends_with: String
+  location: String
+  """
+  All values that are not equal to given value.
+  """
+  location_not: String
+  """
+  All values that are contained in given list.
+  """
+  location_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  location_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  location_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  location_lte: String
+  """
+  All values greater than the given value.
+  """
+  location_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  location_gte: String
+  """
+  All values containing the given string.
+  """
+  location_contains: String
+  """
+  All values not containing the given string.
+  """
+  location_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  location_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  location_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  location_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  location_not_ends_with: String
+  picture: String
+  """
+  All values that are not equal to given value.
+  """
+  picture_not: String
+  """
+  All values that are contained in given list.
+  """
+  picture_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  picture_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  picture_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  picture_lte: String
+  """
+  All values greater than the given value.
+  """
+  picture_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  picture_gte: String
+  """
+  All values containing the given string.
+  """
+  picture_contains: String
+  """
+  All values not containing the given string.
+  """
+  picture_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  picture_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  picture_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  picture_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  picture_not_ends_with: String
+  user: UserWhereInput
+}
+
+input ProfileWhereUniqueInput {
+  id: ID
+}
+
 type User implements Node {
   id: ID!
   email: String!
   password: String!
-  name: String!
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: [String!]
+  profile(where: ProfileWhereInput): Profile!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
 }
 
@@ -484,7 +928,12 @@ type UserConnection {
 input UserCreateInput {
   email: String!
   password: String!
-  name: String!
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: UserCreatetokensInput
+  profile: ProfileCreateOneWithoutUserInput!
   posts: PostCreateManyWithoutAuthorInput
 }
 
@@ -493,10 +942,35 @@ input UserCreateOneWithoutPostsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutProfileInput {
+  create: UserCreateWithoutProfileInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreatetokensInput {
+  set: [String!]
+}
+
 input UserCreateWithoutPostsInput {
   email: String!
   password: String!
-  name: String!
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: UserCreatetokensInput
+  profile: ProfileCreateOneWithoutUserInput!
+}
+
+input UserCreateWithoutProfileInput {
+  email: String!
+  password: String!
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: UserCreatetokensInput
+  posts: PostCreateManyWithoutAuthorInput
 }
 
 """
@@ -520,8 +994,14 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
-  name_ASC
-  name_DESC
+  passwordResetToken_ASC
+  passwordResetToken_DESC
+  passwordResetExpires_ASC
+  passwordResetExpires_DESC
+  facebook_ASC
+  facebook_DESC
+  google_ASC
+  google_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -532,7 +1012,11 @@ type UserPreviousValues {
   id: ID!
   email: String!
   password: String!
-  name: String!
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: [String!]
 }
 
 type UserSubscriptionPayload {
@@ -577,7 +1061,12 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   email: String
   password: String
-  name: String
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: UserUpdatetokensInput
+  profile: ProfileUpdateOneWithoutUserInput
   posts: PostUpdateManyWithoutAuthorInput
 }
 
@@ -589,15 +1078,48 @@ input UserUpdateOneWithoutPostsInput {
   upsert: UserUpsertWithoutPostsInput
 }
 
+input UserUpdateOneWithoutProfileInput {
+  create: UserCreateWithoutProfileInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutProfileDataInput
+  upsert: UserUpsertWithoutProfileInput
+}
+
+input UserUpdatetokensInput {
+  set: [String!]
+}
+
 input UserUpdateWithoutPostsDataInput {
   email: String
   password: String
-  name: String
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: UserUpdatetokensInput
+  profile: ProfileUpdateOneWithoutUserInput
+}
+
+input UserUpdateWithoutProfileDataInput {
+  email: String
+  password: String
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: UserUpdatetokensInput
+  posts: PostUpdateManyWithoutAuthorInput
 }
 
 input UserUpsertWithoutPostsInput {
   update: UserUpdateWithoutPostsDataInput!
   create: UserCreateWithoutPostsInput!
+}
+
+input UserUpsertWithoutProfileInput {
+  update: UserUpdateWithoutProfileDataInput!
+  create: UserCreateWithoutProfileInput!
 }
 
 input UserWhereInput {
@@ -772,59 +1294,195 @@ input UserWhereInput {
   All values not ending with the given string.
   """
   password_not_ends_with: String
-  name: String
+  passwordResetToken: String
   """
   All values that are not equal to given value.
   """
-  name_not: String
+  passwordResetToken_not: String
   """
   All values that are contained in given list.
   """
-  name_in: [String!]
+  passwordResetToken_in: [String!]
   """
   All values that are not contained in given list.
   """
-  name_not_in: [String!]
+  passwordResetToken_not_in: [String!]
   """
   All values less than the given value.
   """
-  name_lt: String
+  passwordResetToken_lt: String
   """
   All values less than or equal the given value.
   """
-  name_lte: String
+  passwordResetToken_lte: String
   """
   All values greater than the given value.
   """
-  name_gt: String
+  passwordResetToken_gt: String
   """
   All values greater than or equal the given value.
   """
-  name_gte: String
+  passwordResetToken_gte: String
   """
   All values containing the given string.
   """
-  name_contains: String
+  passwordResetToken_contains: String
   """
   All values not containing the given string.
   """
-  name_not_contains: String
+  passwordResetToken_not_contains: String
   """
   All values starting with the given string.
   """
-  name_starts_with: String
+  passwordResetToken_starts_with: String
   """
   All values not starting with the given string.
   """
-  name_not_starts_with: String
+  passwordResetToken_not_starts_with: String
   """
   All values ending with the given string.
   """
-  name_ends_with: String
+  passwordResetToken_ends_with: String
   """
   All values not ending with the given string.
   """
-  name_not_ends_with: String
+  passwordResetToken_not_ends_with: String
+  passwordResetExpires: DateTime
+  """
+  All values that are not equal to given value.
+  """
+  passwordResetExpires_not: DateTime
+  """
+  All values that are contained in given list.
+  """
+  passwordResetExpires_in: [DateTime!]
+  """
+  All values that are not contained in given list.
+  """
+  passwordResetExpires_not_in: [DateTime!]
+  """
+  All values less than the given value.
+  """
+  passwordResetExpires_lt: DateTime
+  """
+  All values less than or equal the given value.
+  """
+  passwordResetExpires_lte: DateTime
+  """
+  All values greater than the given value.
+  """
+  passwordResetExpires_gt: DateTime
+  """
+  All values greater than or equal the given value.
+  """
+  passwordResetExpires_gte: DateTime
+  facebook: String
+  """
+  All values that are not equal to given value.
+  """
+  facebook_not: String
+  """
+  All values that are contained in given list.
+  """
+  facebook_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  facebook_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  facebook_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  facebook_lte: String
+  """
+  All values greater than the given value.
+  """
+  facebook_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  facebook_gte: String
+  """
+  All values containing the given string.
+  """
+  facebook_contains: String
+  """
+  All values not containing the given string.
+  """
+  facebook_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  facebook_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  facebook_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  facebook_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  facebook_not_ends_with: String
+  google: String
+  """
+  All values that are not equal to given value.
+  """
+  google_not: String
+  """
+  All values that are contained in given list.
+  """
+  google_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  google_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  google_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  google_lte: String
+  """
+  All values greater than the given value.
+  """
+  google_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  google_gte: String
+  """
+  All values containing the given string.
+  """
+  google_contains: String
+  """
+  All values not containing the given string.
+  """
+  google_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  google_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  google_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  google_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  google_not_ends_with: String
+  profile: ProfileWhereInput
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
@@ -837,25 +1495,34 @@ input UserWhereUniqueInput {
 
 type Mutation {
   createPost(data: PostCreateInput!): Post!
+  createProfile(data: ProfileCreateInput!): Profile!
   createUser(data: UserCreateInput!): User!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
+  updateProfile(data: ProfileUpdateInput!, where: ProfileWhereUniqueInput!): Profile
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deletePost(where: PostWhereUniqueInput!): Post
+  deleteProfile(where: ProfileWhereUniqueInput!): Profile
   deleteUser(where: UserWhereUniqueInput!): User
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
+  upsertProfile(where: ProfileWhereUniqueInput!, create: ProfileCreateInput!, update: ProfileUpdateInput!): Profile!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
+  updateManyProfiles(data: ProfileUpdateInput!, where: ProfileWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
+  deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
 type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
+  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   post(where: PostWhereUniqueInput!): Post
+  profile(where: ProfileWhereUniqueInput!): Profile
   user(where: UserWhereUniqueInput!): User
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  profilesConnection(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   """
   Fetches an object given its ID
@@ -868,6 +1535,7 @@ type Query {
 
 type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 `
@@ -886,6 +1554,22 @@ export type PostOrderByInput =
   'text_ASC' |
   'text_DESC'
 
+export type ProfileOrderByInput = 
+  'id_ASC' |
+  'id_DESC' |
+  'name_ASC' |
+  'name_DESC' |
+  'gender_ASC' |
+  'gender_DESC' |
+  'location_ASC' |
+  'location_DESC' |
+  'picture_ASC' |
+  'picture_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
+
 export type UserOrderByInput = 
   'id_ASC' |
   'id_DESC' |
@@ -893,8 +1577,14 @@ export type UserOrderByInput =
   'email_DESC' |
   'password_ASC' |
   'password_DESC' |
-  'name_ASC' |
-  'name_DESC' |
+  'passwordResetToken_ASC' |
+  'passwordResetToken_DESC' |
+  'passwordResetExpires_ASC' |
+  'passwordResetExpires_DESC' |
+  'facebook_ASC' |
+  'facebook_DESC' |
+  'google_ASC' |
+  'google_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC' |
   'createdAt_ASC' |
@@ -905,9 +1595,12 @@ export type MutationType =
   'UPDATED' |
   'DELETED'
 
-export interface UserCreateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput
-  connect?: UserWhereUniqueInput
+export interface ProfileCreateInput {
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+  user: UserCreateOneWithoutProfileInput
 }
 
 export interface PostWhereInput {
@@ -982,6 +1675,237 @@ export interface PostCreateManyWithoutAuthorInput {
   connect?: PostWhereUniqueInput[] | PostWhereUniqueInput
 }
 
+export interface ProfileWhereInput {
+  AND?: ProfileWhereInput[] | ProfileWhereInput
+  OR?: ProfileWhereInput[] | ProfileWhereInput
+  NOT?: ProfileWhereInput[] | ProfileWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  gender?: String
+  gender_not?: String
+  gender_in?: String[] | String
+  gender_not_in?: String[] | String
+  gender_lt?: String
+  gender_lte?: String
+  gender_gt?: String
+  gender_gte?: String
+  gender_contains?: String
+  gender_not_contains?: String
+  gender_starts_with?: String
+  gender_not_starts_with?: String
+  gender_ends_with?: String
+  gender_not_ends_with?: String
+  location?: String
+  location_not?: String
+  location_in?: String[] | String
+  location_not_in?: String[] | String
+  location_lt?: String
+  location_lte?: String
+  location_gt?: String
+  location_gte?: String
+  location_contains?: String
+  location_not_contains?: String
+  location_starts_with?: String
+  location_not_starts_with?: String
+  location_ends_with?: String
+  location_not_ends_with?: String
+  picture?: String
+  picture_not?: String
+  picture_in?: String[] | String
+  picture_not_in?: String[] | String
+  picture_lt?: String
+  picture_lte?: String
+  picture_gt?: String
+  picture_gte?: String
+  picture_contains?: String
+  picture_not_contains?: String
+  picture_starts_with?: String
+  picture_not_starts_with?: String
+  picture_ends_with?: String
+  picture_not_ends_with?: String
+  user?: UserWhereInput
+}
+
+export interface UserUpsertWithoutPostsInput {
+  update: UserUpdateWithoutPostsDataInput
+  create: UserCreateWithoutPostsInput
+}
+
+export interface UserUpdatetokensInput {
+  set?: String[] | String
+}
+
+export interface ProfileUpsertWithoutUserInput {
+  update: ProfileUpdateWithoutUserDataInput
+  create: ProfileCreateWithoutUserInput
+}
+
+export interface PostCreateWithoutAuthorInput {
+  isPublished?: Boolean
+  title: String
+  text: String
+}
+
+export interface PostCreateInput {
+  isPublished?: Boolean
+  title: String
+  text: String
+  author: UserCreateOneWithoutPostsInput
+}
+
+export interface UserSubscriptionWhereInput {
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: UserWhereInput
+}
+
+export interface UserCreateOneWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface PostSubscriptionWhereInput {
+  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
+  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
+  NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: PostWhereInput
+}
+
+export interface UserCreateWithoutPostsInput {
+  email: String
+  password: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: UserCreatetokensInput
+  profile: ProfileCreateOneWithoutUserInput
+}
+
+export interface PostWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface UserCreatetokensInput {
+  set?: String[] | String
+}
+
+export interface UserWhereUniqueInput {
+  id?: ID_Input
+  email?: String
+}
+
+export interface ProfileCreateOneWithoutUserInput {
+  create?: ProfileCreateWithoutUserInput
+  connect?: ProfileWhereUniqueInput
+}
+
+export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput
+  update: PostUpdateWithoutAuthorDataInput
+  create: PostCreateWithoutAuthorInput
+}
+
+export interface ProfileCreateWithoutUserInput {
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+}
+
+export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput
+  data: PostUpdateWithoutAuthorDataInput
+}
+
+export interface ProfileUpdateWithoutUserDataInput {
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+}
+
+export interface UserUpdateWithoutProfileDataInput {
+  email?: String
+  password?: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: UserUpdatetokensInput
+  posts?: PostUpdateManyWithoutAuthorInput
+}
+
+export interface UserCreateOneWithoutProfileInput {
+  create?: UserCreateWithoutProfileInput
+  connect?: UserWhereUniqueInput
+}
+
+export interface ProfileUpdateInput {
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+  user?: UserUpdateOneWithoutProfileInput
+}
+
+export interface UserCreateWithoutProfileInput {
+  email: String
+  password: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: UserCreatetokensInput
+  posts?: PostCreateManyWithoutAuthorInput
+}
+
+export interface ProfileSubscriptionWhereInput {
+  AND?: ProfileSubscriptionWhereInput[] | ProfileSubscriptionWhereInput
+  OR?: ProfileSubscriptionWhereInput[] | ProfileSubscriptionWhereInput
+  NOT?: ProfileSubscriptionWhereInput[] | ProfileSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: ProfileWhereInput
+}
+
 export interface UserWhereInput {
   AND?: UserWhereInput[] | UserWhereInput
   OR?: UserWhereInput[] | UserWhereInput
@@ -1028,23 +1952,124 @@ export interface UserWhereInput {
   password_not_starts_with?: String
   password_ends_with?: String
   password_not_ends_with?: String
-  name?: String
-  name_not?: String
-  name_in?: String[] | String
-  name_not_in?: String[] | String
-  name_lt?: String
-  name_lte?: String
-  name_gt?: String
-  name_gte?: String
-  name_contains?: String
-  name_not_contains?: String
-  name_starts_with?: String
-  name_not_starts_with?: String
-  name_ends_with?: String
-  name_not_ends_with?: String
+  passwordResetToken?: String
+  passwordResetToken_not?: String
+  passwordResetToken_in?: String[] | String
+  passwordResetToken_not_in?: String[] | String
+  passwordResetToken_lt?: String
+  passwordResetToken_lte?: String
+  passwordResetToken_gt?: String
+  passwordResetToken_gte?: String
+  passwordResetToken_contains?: String
+  passwordResetToken_not_contains?: String
+  passwordResetToken_starts_with?: String
+  passwordResetToken_not_starts_with?: String
+  passwordResetToken_ends_with?: String
+  passwordResetToken_not_ends_with?: String
+  passwordResetExpires?: DateTime
+  passwordResetExpires_not?: DateTime
+  passwordResetExpires_in?: DateTime[] | DateTime
+  passwordResetExpires_not_in?: DateTime[] | DateTime
+  passwordResetExpires_lt?: DateTime
+  passwordResetExpires_lte?: DateTime
+  passwordResetExpires_gt?: DateTime
+  passwordResetExpires_gte?: DateTime
+  facebook?: String
+  facebook_not?: String
+  facebook_in?: String[] | String
+  facebook_not_in?: String[] | String
+  facebook_lt?: String
+  facebook_lte?: String
+  facebook_gt?: String
+  facebook_gte?: String
+  facebook_contains?: String
+  facebook_not_contains?: String
+  facebook_starts_with?: String
+  facebook_not_starts_with?: String
+  facebook_ends_with?: String
+  facebook_not_ends_with?: String
+  google?: String
+  google_not?: String
+  google_in?: String[] | String
+  google_not_in?: String[] | String
+  google_lt?: String
+  google_lte?: String
+  google_gt?: String
+  google_gte?: String
+  google_contains?: String
+  google_not_contains?: String
+  google_starts_with?: String
+  google_not_starts_with?: String
+  google_ends_with?: String
+  google_not_ends_with?: String
+  profile?: ProfileWhereInput
   posts_every?: PostWhereInput
   posts_some?: PostWhereInput
   posts_none?: PostWhereInput
+}
+
+export interface ProfileWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface ProfileUpdateOneWithoutUserInput {
+  create?: ProfileCreateWithoutUserInput
+  connect?: ProfileWhereUniqueInput
+  delete?: Boolean
+  update?: ProfileUpdateWithoutUserDataInput
+  upsert?: ProfileUpsertWithoutUserInput
+}
+
+export interface PostUpdateWithoutAuthorDataInput {
+  isPublished?: Boolean
+  title?: String
+  text?: String
+}
+
+export interface UserUpdateOneWithoutProfileInput {
+  create?: UserCreateWithoutProfileInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutProfileDataInput
+  upsert?: UserUpsertWithoutProfileInput
+}
+
+export interface UserUpdateWithoutPostsDataInput {
+  email?: String
+  password?: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: UserUpdatetokensInput
+  profile?: ProfileUpdateOneWithoutUserInput
+}
+
+export interface UserUpdateOneWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutPostsDataInput
+  upsert?: UserUpsertWithoutPostsInput
+}
+
+export interface PostUpdateInput {
+  isPublished?: Boolean
+  title?: String
+  text?: String
+  author?: UserUpdateOneWithoutPostsInput
+}
+
+export interface UserCreateInput {
+  email: String
+  password: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: UserCreatetokensInput
+  profile: ProfileCreateOneWithoutUserInput
+  posts?: PostCreateManyWithoutAuthorInput
 }
 
 export interface PostUpdateManyWithoutAuthorInput {
@@ -1056,111 +2081,21 @@ export interface PostUpdateManyWithoutAuthorInput {
   upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput[] | PostUpsertWithWhereUniqueWithoutAuthorInput
 }
 
-export interface PostUpdateInput {
-  isPublished?: Boolean
-  title?: String
-  text?: String
-  author?: UserUpdateOneWithoutPostsInput
+export interface UserUpsertWithoutProfileInput {
+  update: UserUpdateWithoutProfileDataInput
+  create: UserCreateWithoutProfileInput
 }
 
 export interface UserUpdateInput {
   email?: String
   password?: String
-  name?: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: UserUpdatetokensInput
+  profile?: ProfileUpdateOneWithoutUserInput
   posts?: PostUpdateManyWithoutAuthorInput
-}
-
-export interface PostCreateWithoutAuthorInput {
-  isPublished?: Boolean
-  title: String
-  text: String
-}
-
-export interface UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput
-  create: UserCreateWithoutPostsInput
-}
-
-export interface UserSubscriptionWhereInput {
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: UserWhereInput
-}
-
-export interface UserUpdateWithoutPostsDataInput {
-  email?: String
-  password?: String
-  name?: String
-}
-
-export interface PostWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput
-  update: PostUpdateWithoutAuthorDataInput
-  create: PostCreateWithoutAuthorInput
-}
-
-export interface UserCreateInput {
-  email: String
-  password: String
-  name: String
-  posts?: PostCreateManyWithoutAuthorInput
-}
-
-export interface UserCreateWithoutPostsInput {
-  email: String
-  password: String
-  name: String
-}
-
-export interface UserUpdateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutPostsDataInput
-  upsert?: UserUpsertWithoutPostsInput
-}
-
-export interface PostCreateInput {
-  isPublished?: Boolean
-  title: String
-  text: String
-  author: UserCreateOneWithoutPostsInput
-}
-
-export interface PostUpdateWithoutAuthorDataInput {
-  isPublished?: Boolean
-  title?: String
-  text?: String
-}
-
-export interface UserWhereUniqueInput {
-  id?: ID_Input
-  email?: String
-}
-
-export interface PostSubscriptionWhereInput {
-  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
-  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
-  NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput
-  mutation_in?: MutationType[] | MutationType
-  updatedFields_contains?: String
-  updatedFields_contains_every?: String[] | String
-  updatedFields_contains_some?: String[] | String
-  node?: PostWhereInput
-}
-
-export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput
-  data: PostUpdateWithoutAuthorDataInput
 }
 
 /*
@@ -1175,7 +2110,31 @@ export interface UserPreviousValues {
   id: ID_Output
   email: String
   password: String
-  name: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: String[]
+}
+
+/*
+ * Information about pagination in a connection.
+
+ */
+export interface PageInfo {
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+  startCursor?: String
+  endCursor?: String
+}
+
+export interface Profile extends Node {
+  id: ID_Output
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+  user: User
 }
 
 /*
@@ -1198,49 +2157,6 @@ export interface Post extends Node {
   author: User
 }
 
-/*
- * Information about pagination in a connection.
-
- */
-export interface PageInfo {
-  hasNextPage: Boolean
-  hasPreviousPage: Boolean
-  startCursor?: String
-  endCursor?: String
-}
-
-export interface PostSubscriptionPayload {
-  mutation: MutationType
-  node?: Post
-  updatedFields?: String[]
-  previousValues?: PostPreviousValues
-}
-
-export interface BatchPayload {
-  count: Long
-}
-
-export interface PostPreviousValues {
-  id: ID_Output
-  createdAt: DateTime
-  updatedAt: DateTime
-  isPublished: Boolean
-  title: String
-  text: String
-}
-
-export interface User extends Node {
-  id: ID_Output
-  email: String
-  password: String
-  name: String
-  posts?: Post[]
-}
-
-export interface AggregateUser {
-  count: Int
-}
-
 export interface UserSubscriptionPayload {
   mutation: MutationType
   node?: User
@@ -1257,6 +2173,37 @@ export interface UserEdge {
   cursor: String
 }
 
+export interface BatchPayload {
+  count: Long
+}
+
+export interface AggregateProfile {
+  count: Int
+}
+
+export interface User extends Node {
+  id: ID_Output
+  email: String
+  password: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: String[]
+  profile: Profile
+  posts?: Post[]
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface ProfileConnection {
+  pageInfo: PageInfo
+  edges: ProfileEdge[]
+  aggregate: AggregateProfile
+}
+
 /*
  * An edge in a connection.
 
@@ -1266,8 +2213,52 @@ export interface PostEdge {
   cursor: String
 }
 
+export interface PostPreviousValues {
+  id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
+  isPublished: Boolean
+  title: String
+  text: String
+}
+
+export interface PostSubscriptionPayload {
+  mutation: MutationType
+  node?: Post
+  updatedFields?: String[]
+  previousValues?: PostPreviousValues
+}
+
+export interface ProfileSubscriptionPayload {
+  mutation: MutationType
+  node?: Profile
+  updatedFields?: String[]
+  previousValues?: ProfilePreviousValues
+}
+
+export interface ProfilePreviousValues {
+  id: ID_Output
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+}
+
+export interface AggregateUser {
+  count: Int
+}
+
 export interface AggregatePost {
   count: Int
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface ProfileEdge {
+  node: Profile
+  cursor: String
 }
 
 /*
@@ -1281,6 +2272,11 @@ export interface UserConnection {
 }
 
 /*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean
+
+/*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
 export type Int = number
@@ -1292,20 +2288,15 @@ export type ID_Input = string | number
 export type ID_Output = string
 
 /*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string
-
-/*
 The 'Long' scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 */
 export type Long = string
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type Boolean = boolean
+export type String = string
 
 export type DateTime = string
 
@@ -1317,31 +2308,41 @@ export interface Schema {
 
 export type Query = {
   posts: (args: { where?: PostWhereInput, orderBy?: PostOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Post[]>
+  profiles: (args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Profile[]>
   users: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<User[]>
   post: (args: { where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Post | null>
+  profile: (args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Profile | null>
   user: (args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
   postsConnection: (args: { where?: PostWhereInput, orderBy?: PostOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<PostConnection>
+  profilesConnection: (args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<ProfileConnection>
   usersConnection: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<UserConnection>
   node: (args: { id: ID_Output }, info?: GraphQLResolveInfo | string) => Promise<Node | null>
 }
 
 export type Mutation = {
   createPost: (args: { data: PostCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Post>
+  createProfile: (args: { data: ProfileCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Profile>
   createUser: (args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string) => Promise<User>
   updatePost: (args: { data: PostUpdateInput, where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Post | null>
+  updateProfile: (args: { data: ProfileUpdateInput, where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Profile | null>
   updateUser: (args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
   deletePost: (args: { where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Post | null>
+  deleteProfile: (args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Profile | null>
   deleteUser: (args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
   upsertPost: (args: { where: PostWhereUniqueInput, create: PostCreateInput, update: PostUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Post>
+  upsertProfile: (args: { where: ProfileWhereUniqueInput, create: ProfileCreateInput, update: ProfileUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Profile>
   upsertUser: (args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<User>
   updateManyPosts: (args: { data: PostUpdateInput, where?: PostWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
+  updateManyProfiles: (args: { data: ProfileUpdateInput, where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   updateManyUsers: (args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManyPosts: (args: { where?: PostWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
+  deleteManyProfiles: (args: { where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManyUsers: (args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
 }
 
 export type Subscription = {
   post: (args: { where?: PostSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<PostSubscriptionPayload>>
+  profile: (args: { where?: ProfileSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<ProfileSubscriptionPayload>>
   user: (args: { where?: UserSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<UserSubscriptionPayload>>
 }
 
@@ -1353,36 +2354,47 @@ export class Prisma extends BasePrisma {
 
   exists = {
     Post: (where: PostWhereInput): Promise<boolean> => super.existsDelegate('query', 'posts', { where }, {}, '{ id }'),
+    Profile: (where: ProfileWhereInput): Promise<boolean> => super.existsDelegate('query', 'profiles', { where }, {}, '{ id }'),
     User: (where: UserWhereInput): Promise<boolean> => super.existsDelegate('query', 'users', { where }, {}, '{ id }')
   }
 
   query: Query = {
     posts: (args, info): Promise<Post[]> => super.delegate('query', 'posts', args, {}, info),
+    profiles: (args, info): Promise<Profile[]> => super.delegate('query', 'profiles', args, {}, info),
     users: (args, info): Promise<User[]> => super.delegate('query', 'users', args, {}, info),
     post: (args, info): Promise<Post | null> => super.delegate('query', 'post', args, {}, info),
+    profile: (args, info): Promise<Profile | null> => super.delegate('query', 'profile', args, {}, info),
     user: (args, info): Promise<User | null> => super.delegate('query', 'user', args, {}, info),
     postsConnection: (args, info): Promise<PostConnection> => super.delegate('query', 'postsConnection', args, {}, info),
+    profilesConnection: (args, info): Promise<ProfileConnection> => super.delegate('query', 'profilesConnection', args, {}, info),
     usersConnection: (args, info): Promise<UserConnection> => super.delegate('query', 'usersConnection', args, {}, info),
     node: (args, info): Promise<Node | null> => super.delegate('query', 'node', args, {}, info)
   }
 
   mutation: Mutation = {
     createPost: (args, info): Promise<Post> => super.delegate('mutation', 'createPost', args, {}, info),
+    createProfile: (args, info): Promise<Profile> => super.delegate('mutation', 'createProfile', args, {}, info),
     createUser: (args, info): Promise<User> => super.delegate('mutation', 'createUser', args, {}, info),
     updatePost: (args, info): Promise<Post | null> => super.delegate('mutation', 'updatePost', args, {}, info),
+    updateProfile: (args, info): Promise<Profile | null> => super.delegate('mutation', 'updateProfile', args, {}, info),
     updateUser: (args, info): Promise<User | null> => super.delegate('mutation', 'updateUser', args, {}, info),
     deletePost: (args, info): Promise<Post | null> => super.delegate('mutation', 'deletePost', args, {}, info),
+    deleteProfile: (args, info): Promise<Profile | null> => super.delegate('mutation', 'deleteProfile', args, {}, info),
     deleteUser: (args, info): Promise<User | null> => super.delegate('mutation', 'deleteUser', args, {}, info),
     upsertPost: (args, info): Promise<Post> => super.delegate('mutation', 'upsertPost', args, {}, info),
+    upsertProfile: (args, info): Promise<Profile> => super.delegate('mutation', 'upsertProfile', args, {}, info),
     upsertUser: (args, info): Promise<User> => super.delegate('mutation', 'upsertUser', args, {}, info),
     updateManyPosts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyPosts', args, {}, info),
+    updateManyProfiles: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyProfiles', args, {}, info),
     updateManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyUsers', args, {}, info),
     deleteManyPosts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyPosts', args, {}, info),
+    deleteManyProfiles: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyProfiles', args, {}, info),
     deleteManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyUsers', args, {}, info)
   }
 
   subscription: Subscription = {
     post: (args, infoOrQuery): Promise<AsyncIterator<PostSubscriptionPayload>> => super.delegateSubscription('post', args, {}, infoOrQuery),
+    profile: (args, infoOrQuery): Promise<AsyncIterator<ProfileSubscriptionPayload>> => super.delegateSubscription('profile', args, {}, infoOrQuery),
     user: (args, infoOrQuery): Promise<AsyncIterator<UserSubscriptionPayload>> => super.delegateSubscription('user', args, {}, infoOrQuery)
   }
 }

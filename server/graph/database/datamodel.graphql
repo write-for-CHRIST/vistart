@@ -5,13 +5,27 @@ type Post {
   isPublished: Boolean! @default(value: "false")
   title: String!
   text: String!
-  author: User!
+  author: User! @relation(name: "UserPosts")
+}
+
+type Profile {
+  id: ID! @unique
+  name: String
+  gender: String
+  location: String
+  picture: String
+  user: User! @relation(name: "UserProfile")
 }
 
 type User {
   id: ID! @unique
   email: String! @unique
   password: String!
-  name: String!
-  posts: [Post!]!
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: [String!]
+  profile: Profile! @relation(name: "UserProfile")
+  posts: [Post!]! @relation(name: "UserPosts")
 }
