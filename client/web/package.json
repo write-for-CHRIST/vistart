@@ -1,15 +1,7 @@
 {
-  "name": "webapp",
+  "name": "web",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@bit/writeforchrist.react.components.post": "^0.1.0",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
-    "react-primitives": "^0.5.1",
-    "react-scripts-ts": "2.16.0",
-    "styled-components": "^3.2.6"
-  },
   "scripts": {
     "start": "yarn start:dev",
     "start:dev": "react-scripts-ts start",
@@ -17,6 +9,13 @@
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
+  },
+  "dependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-primitives": "^0.5.1",
+    "react-scripts-ts": "2.16.0",
+    "styled-components": "^3.2.6"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",

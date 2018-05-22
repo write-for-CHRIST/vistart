@@ -16,13 +16,6 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@bit/writeforchrist.react.components.post@^0.1.0":
-  version "0.1.0"
-  resolved "https://node.bitsrc.io/writeforchrist.react.components.post/-/writeforchrist.react.components.post-0.1.0.tgz#3b584362b54894463b8617419ecff94bb3844479"
-  dependencies:
-    react "^16.3.2"
-    styled-components "^3.2.6"
-
 "@types/jest@^22.2.3":
   version "22.2.3"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.2.3.tgz#0157c0316dc3722c43a7b71de3fdf3acbccef10d"
