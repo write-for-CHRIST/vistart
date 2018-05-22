@@ -27,6 +27,8 @@ RUN set -ex; \
 
 COPY . .
 
+RUN yarn config set "@bit:registry" "https://node.bitsrc.io/"
+
 USER root
 
 EXPOSE 3000
