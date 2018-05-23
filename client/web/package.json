@@ -3,25 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "yarn start:dev",
-    "start:dev": "react-scripts-ts start",
+    "start": "react-scripts start",
+    "start:dev": "yarn start",
     "start:prod": "serve ./build",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
+    "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-primitives": "^0.5.1",
-    "react-scripts-ts": "2.16.0",
+    "react-scripts": "1.1.4",
+    "serve": "^6.5.8",
     "styled-components": "^3.2.6"
-  },
-  "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "@types/node": "^10.1.2",
-    "@types/react": "^16.3.14",
-    "@types/react-dom": "^16.0.5",
-    "typescript": "^2.8.3"
   }
 }
