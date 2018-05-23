@@ -30,7 +30,7 @@ services:
     build:
       context: client/web
       args:
-        NODE_ENV: development
+        - NODE_ENV
     ports:
       - 3000:3000
     volumes:
@@ -46,6 +46,7 @@ services:
     build:
       context: client/app
       args:
+        - NODE_ENV
         - EXPO_USERNAME
         - EXPO_PASSWORD
     ports:
@@ -66,7 +67,7 @@ services:
     build:
       context: server/graph
       args:
-        NODE_ENV: development
+        - NODE_ENV
     ports:
       - 4000:4000
       - 4001:4001
