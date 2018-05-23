@@ -42,6 +42,26 @@ services:
     env_file:
       - ./envs/share.env
       - ./envs/web.env
+  client_app:
+    build:
+      context: client/app
+      args:
+        - EXPO_USERNAME
+        - EXPO_PASSWORD
+    ports:
+      - 19000:19000
+      - 19001:19001
+      - 8081:8081
+      - "0.0.0.0:4040:4040"
+    volumes:
+      - yarn:/home/node/.cache/yarn
+      - ./client/app:/app
+      - ./client/app/package.json:/app/package.json
+      - ./client/app/yarn.lock:/app/yarn.lock
+      - ./tools/npm.js:/app/npm.js
+    env_file:
+      - ./envs/share.env
+      - ./envs/app.env
   server_graph:
     build:
       context: server/graph

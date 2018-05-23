@@ -18,6 +18,7 @@ build_env_file=$(pwd)/envs/build.env
 share_env_file=$(pwd)/envs/share.env
 graph_env_file=$(pwd)/envs/graph.env
 web_env_file=$(pwd)/envs/web.env
+app_env_file=$(pwd)/envs/app.env
 
 if [ -f $build_env_file ]; then
   echo "$build_env_file file already existed, skip copy!";
@@ -45,4 +46,11 @@ if [ -f $web_env_file ]; then
 else
   cp ./envs/web.env.sample $web_env_file;
   echo "Copied file: "$web_env_file;
+fi;
+
+if [ -f $app_env_file ]; then
+  echo "$app_env_file file already existed, skip copy!";
+else
+  cp ./envs/app.env.sample $app_env_file;
+  echo "Copied file: "$app_env_file;
 fi;
