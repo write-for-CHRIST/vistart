@@ -1,4 +1,4 @@
-FROM node:8.11.2
+FROM node:10.1
 
 ARG NODE_ENV=production
 ARG EXPO_USERNAME
@@ -11,10 +11,13 @@ RUN mkdir -p /app/node_modules
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+USER root
+
+COPY package.json package-lock.json ./
 
 # Install expo & do login
-RUN npm install -g exp
+RUN npm install -g exp@54.0.0
+RUN npm install -g --unsafe-perm bit-bin@0.12.13
 
 RUN set -ex; \
     if [ "$NODE_ENV" = "production" ]; then \
@@ -34,8 +37,6 @@ RUN set -ex; \
 COPY . .
 
 RUN yarn config set "@bit:registry" "https://node.bitsrc.io/"
-
-USER root
 
 EXPOSE 19000
 EXPOSE 19001
