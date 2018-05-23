@@ -7,7 +7,7 @@
     "start:dev": "yarn start",
     "start:prod": "serve ./build",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --watchAll",
     "eject": "react-scripts eject"
   },
   "dependencies": {
