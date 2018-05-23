@@ -1,0 +1,11 @@
+{
+    "env": {
+        "compiler": "none",
+        "tester": "none"
+    },
+    "dependencies": {
+        "writeforchrist.vistart/components/auth": "0.1.2"
+    },
+    "componentsDefaultDirectory": "components/{namespace}/{name}",
+    "packageManager": "npm"
+}
