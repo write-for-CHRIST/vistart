@@ -11,6 +11,7 @@
     "chmod": "chmod +x ./tools/*.sh",
     "preinstall": "yarn chmod && ./tools/init.sh",
     "build": "nodenv -E ./envs/build.env -e 'docker-compose build'",
+    "build:nocache": "nodenv -E ./envs/build.env -e 'docker-compose build --no-cache'",
     "build:ci": "nodenv -E ./envs/ci.env -e 'docker-compose build'",
     "start": "docker-compose up",
     "down": "docker-compose down",
