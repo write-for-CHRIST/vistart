@@ -4,7 +4,7 @@
         "tester": "none"
     },
     "dependencies": {
-        "writeforchrist.vistart/components/auth": "0.1.2"
+        "writeforchrist.vistart/components/auth": "0.1.3"
     },
     "componentsDefaultDirectory": "components/{namespace}/{name}",
     "packageManager": "npm"

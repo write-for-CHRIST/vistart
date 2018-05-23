@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import Auth from '@bit/writeforchrist.vistart.components.auth'
 
 export default class App extends React.Component {
@@ -7,7 +7,21 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <Text>Open up App.js to start working on your app!</Text>
-        <Auth header="Hello React Native with Expo" />
+        <Auth email="admin@phuc.am"
+          password="nooneknows"
+          render={(auth) => (
+            <View>
+              <TextInput value={auth.email} onChange={auth.updateEmail} />
+              <TextInput value={auth.password} onChange={auth.updatePassword} />
+              <TouchableOpacity onPress={auth.login}>
+                <Text>Login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={auth.reset}>
+                <Text>Reset</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
       </View>
     );
   }

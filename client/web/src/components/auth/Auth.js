@@ -6,7 +6,22 @@ import ReactDom from 'react-dom'
  * @name Auth
  * @description Authentication form.
  * @example
- * <Auth>
+ * <Auth email="admin@phuc.am"
+ *      password="nooneknows"
+ *      onLogin={isAuthenticating => console.log(`Authenticating: ${isAuthenticating}`)}
+ *      render={auth => (
+ *        <form>
+ *          <input type="email" value={auth.email} onChange={auth.updateEmail} />
+ *          <input type="password" value={auth.password} onChange={auth.updatePassword} />
+ *          <hr />
+ *          <button type="button" onClick={auth.reset}>
+ *            Reset
+ *          </button>
+ *          <button type="button" onClick={auth.login}>
+ *            Login
+ *          </button>
+ *        </form>
+ *      )}>
  * </Auth>
  */
 class Auth extends Component {
