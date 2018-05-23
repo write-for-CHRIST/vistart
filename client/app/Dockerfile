@@ -19,18 +19,16 @@ RUN npm install -g exp
 RUN set -ex; \
     if [ "$NODE_ENV" = "production" ]; then \
         echo "Build for production image"; \
-        yarn install --no-cache --frozen-lockfile --production; \
+        npm install; \
     elif [ "$NODE_ENV" = "test" ]; then \
         echo "Build for test image"; \
-        touch yarn-error.log; \
-        yarn install --no-cache --frozen-lockfile; \
-        chown -R root:root node_modules package.json yarn.lock yarn-error.log; \
+        npm install; \
+        chown -R root:root node_modules package.json package-lock.json; \
     else \
         echo "Build for development image"; \
         exp login --username $EXPO_USERNAME --password $EXPO_PASSWORD; \
-        touch yarn-error.log; \
-        mkdir -p -m 777 build node_modules /home/node/.cache/yarn; \
-        chown -R root:root node_modules package.json yarn.lock /home/node/.cache/yarn; \
+        mkdir -p -m 777 build node_modules; \
+        chown -R root:root node_modules package.json package-lock.json; \
     fi;
 
 COPY . .
