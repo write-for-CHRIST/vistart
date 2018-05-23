@@ -15,8 +15,6 @@ COPY package.json yarn.lock ./
 
 # Install expo & do login
 RUN npm install -g exp
-RUN echo "Expo credentials: $EXPO_USERNAME $EXPO_PASSWORD"
-RUN exp login --username $EXPO_USERNAME --password $EXPO_PASSWORD
 
 RUN set -ex; \
     if [ "$NODE_ENV" = "production" ]; then \
@@ -29,6 +27,7 @@ RUN set -ex; \
         chown -R root:root node_modules package.json yarn.lock yarn-error.log; \
     else \
         echo "Build for development image"; \
+        exp login --username $EXPO_USERNAME --password $EXPO_PASSWORD; \
         touch yarn-error.log; \
         mkdir -p -m 777 build node_modules /home/node/.cache/yarn; \
         chown -R root:root node_modules package.json yarn.lock /home/node/.cache/yarn; \
