@@ -17,7 +17,7 @@ install:
 
 script:
   - yarn
-  - yarn build
+  - yarn build:ci
   - yarn test
 
 notifications:

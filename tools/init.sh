@@ -14,11 +14,19 @@ command -v prisma >/dev/null 2>&1 || {
 }
 
 # Make copy of env files for docker-compose.
+ci_env_file=$(pwd)/envs/ci.env
 build_env_file=$(pwd)/envs/build.env
 share_env_file=$(pwd)/envs/share.env
 graph_env_file=$(pwd)/envs/graph.env
 web_env_file=$(pwd)/envs/web.env
 app_env_file=$(pwd)/envs/app.env
+
+if [ -f $ci_env_file ]; then
+  echo "$ci_env_file file already existed, skip copy!";
+else
+  cp ./envs/ci.env.sample $ci_env_file;
+  echo "Copied file: "$ci_env_file;
+fi;
 
 if [ -f $build_env_file ]; then
   echo "$build_env_file file already existed, skip copy!";
