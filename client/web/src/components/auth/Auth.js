@@ -1,4 +1,6 @@
 import React from 'react'
+import ReactDom from 'react-dom'
+import * as p from 'react-primitives'
 import styled from 'styled-components/primitives'
 
 const Container = styled.View`
