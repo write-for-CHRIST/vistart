@@ -25,6 +25,7 @@ RUN set -ex; \
         npm install; \
     elif [ "$NODE_ENV" = "test" ]; then \
         echo "Build for test image"; \
+        bit install; \
         npm install; \
         chown -R root:root node_modules package.json package-lock.json; \
     else \
