@@ -27,7 +27,6 @@ install:
 
 script:
   - yarn down
-  - yarn start
   - yarn test
 
 notifications:
