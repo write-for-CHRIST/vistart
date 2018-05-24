@@ -1,5 +1,9 @@
 // eslint-disable-next-line
 import ReactDom from 'react-dom'
+// eslint-disable-next-line
+import ReactRedux from 'react-redux'
+// eslint-disable-next-line
+import Redux from 'redux'
 import React, {Component} from 'react'
 import {Field, reduxForm} from 'redux-form'
 
