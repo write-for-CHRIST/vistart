@@ -17,7 +17,6 @@ COPY package.json package-lock.json ./
 
 # Install expo & do login
 RUN npm install -g exp@54.0.0
-RUN npm install -g --unsafe-perm bit-bin@0.12.13
 RUN yarn config set "@bit:registry" "https://node.bitsrc.io/"
 
 RUN set -ex; \
@@ -26,8 +25,8 @@ RUN set -ex; \
         npm install; \
     elif [ "$NODE_ENV" = "test" ]; then \
         echo "Build for test image"; \
-        npm install; \
         chown -R root:root node_modules package.json package-lock.json; \
+        npm install; \
     else \
         echo "Build for development image"; \
         exp login --username $EXPO_USERNAME --password $EXPO_PASSWORD; \
