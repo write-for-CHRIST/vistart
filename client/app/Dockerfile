@@ -17,7 +17,7 @@ COPY package.json package-lock.json ./
 
 # Install expo & do login
 RUN npm install -g exp@54.0.0
-RUN yarn config set "@bit:registry" "https://node.bitsrc.io/"
+RUN npm config set '@bit:registry' https://node.bitsrc.io
 
 RUN set -ex; \
     if [ "$NODE_ENV" = "production" ]; then \
