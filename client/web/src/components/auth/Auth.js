@@ -1,10 +1,9 @@
-// eslint-disable-next-line
+/* eslint-disable */
 import ReactDom from 'react-dom'
-// eslint-disable-next-line
 import ReactRedux from 'react-redux'
-// eslint-disable-next-line
 import Redux from 'redux'
-import React, {Component} from 'react'
+/* eslint-enable */
+import React, {Component, Fragment} from 'react'
 import {Field, reduxForm} from 'redux-form'
 
 const defaultAuth = async values => {
@@ -73,15 +72,41 @@ class AuthFormContainer extends Component {
   }
 }
 
-class AuthForm extends Component {
+class FormWrapper extends Component {
+  static defaultProps = {
+    onSubmit: () => {},
+  }
+
+  submit = values => {
+    this.props.onSubmit(values)
+  }
+
   render() {
-    const {handleSubmit} = this.props
+    return this.props.render({
+      submit: this.submit,
+    })
+  }
+}
+
+class AuthForm extends Component {
+  static defaultProps = {
+    emailComp: 'input',
+    pwdComp: 'input',
+    submitComp: () => {}
+  }
+  render() {
+    const {handleSubmit, emailComp, pwdComp, submitComp} = this.props
     return (
-      <form onSubmit={handleSubmit}>
-        <Field name="email" component="input" type="email" label="Email" />
-        <Field name="password" component="input" type="password" label="Password" />
-        <button type="submit">Login</button>
-      </form>
+      <FormWrapper
+        onSubmit={handleSubmit}
+        render={({submit}) => (
+          <Fragment>
+            <Field name="email" component={emailComp} type="email" label="Email" />
+            <Field name="password" component={pwdComp} type="password" label="Password" />
+            {submitComp(submit)}
+          </Fragment>
+        )}
+      />
     )
   }
 }
@@ -93,13 +118,13 @@ AuthForm = reduxForm({form: 'auth'})(AuthForm)
  * @name Auth
  * @description A redux connected authentication form.
  * @example
- * <Auth 
+ * <Auth
  *  onSuccess={(values) => {window.alert(`Success: ${JSON.stringify(values)}`)}}
  *  onFail={(err) => {window.alert(`Fail: ${err}`)}}
  * />
  */
 const Auth = props => (
-  <AuthFormContainer {...props} render={auth => <AuthForm onSubmit={auth.login} />} />
+  <AuthFormContainer {...props} render={auth => <AuthForm submitComp={props.submitComp} onSubmit={auth.login} />} />
 )
 
 export default Auth

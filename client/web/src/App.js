@@ -20,7 +20,10 @@ class App extends Component {
           <p className="App-intro">
             To get started, edit <code>src/App.js</code> and save to reload.
           </p>
-          <Auth onSuccess={this.handleSuccess} />
+          <Auth
+            onSuccess={this.handleSuccess}
+            submitComp={submit => <button onClick={submit}>Submit</button>}
+          />
         </div>
       </AppProvider>
     )
