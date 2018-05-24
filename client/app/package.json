@@ -6,9 +6,10 @@
     "test": "node ./node_modules/jest/bin/jest.js --watchAll"
   },
   "dependencies": {
+    "@bit/writeforchrist.vistart.components.auth": "^0.1.3",
     "expo": "^27.0.1",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
-    "@bit/writeforchrist.vistart.components.auth": "file:./components/components/auth"
+    "redux-form": "^7.3.0"
   }
 }
