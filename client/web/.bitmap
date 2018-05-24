@@ -46,7 +46,7 @@
         "trackDir": "src/redux/reducers",
         "origin": "AUTHORED"
     },
-    "writeforchrist.vistart/components/auth@0.1.6": {
+    "writeforchrist.vistart/components/auth@0.1.7": {
         "files": [
             {
                 "relativePath": "src/components/auth/Auth.js",
