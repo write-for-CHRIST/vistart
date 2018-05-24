@@ -6,7 +6,9 @@ services:
 node_js:
   - stable
 
-cache: yarn
+cache:
+  directories:
+    - docker
 
 before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
