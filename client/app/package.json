@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "start": "exp start --host $EXPO_HOST",
-    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
+    "test": "node ./node_modules/jest/bin/jest.js",
+    "test:watch": "npm run test --watchAll"
   },
   "dependencies": {
     "expo": "^27.0.1",
