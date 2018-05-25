@@ -16,6 +16,7 @@
     "start": "docker-compose up",
     "down": "docker-compose down",
     "test": "run-p test:graph test:web test:app",
+    "test:ci": "run-p testci:graph testci:web testci:app",
     "exec:graph": "docker-compose exec server_graph",
     "exec:web": "docker-compose exec client_web",
     "exec:app": "docker-compose exec client_app",
@@ -34,6 +35,9 @@
     "test:graph": "echo \"Not yet implemented test for server_graph\"",
     "test:web": "docker-compose run client_web yarn && cd client/web && yarn test",
     "test:app": "docker-compose run client_app yarn && cd client/app && npm test",
+    "testci:graph": "cd server/graph && yarn test",
+    "testci:web": "cd client/web && yarn test",
+    "testci:app": "cd client/app && npm test",
     "deploy:graph": "nodenv -E ./envs/graph.env -e 'cd server/graph && prisma deploy'",
     "reset:graph": "nodenv -E ./envs/graph.env -e 'cd server/graph && prisma reset'"
   },
