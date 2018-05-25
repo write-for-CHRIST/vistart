@@ -9,7 +9,8 @@
     "dev": "npm-run-all --parallel start playground",
     "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
     "playground": "graphql playground --server-only --port 4001",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "test": "echo 'Test not yet implemented'"
   },
   "dependencies": {
     "bcryptjs": "2.4.3",
