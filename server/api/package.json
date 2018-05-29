@@ -5,19 +5,20 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn start:prod",
-    "start:dev": "nodemon --watch 'app/**/*' -e ts,tsx --exec 'ts-node' app/index.ts",
+    "start:dev": "nodemon --watch app --watch graphql --watch config -e ts,tsx --exec 'ts-node' app/index.ts",
     "start:prod": "node dist/server.js",
     "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "apollo-boost": "^0.1.6",
     "body-parser": "^1.18.3",
     "compression": "^1.7.2",
     "errorhandler": "^1.5.0",
     "express": "^4.16.3",
     "express-validator": "^5.2.0",
+    "graphql": "^0.13.2",
+    "graphql-request": "^1.6.0",
     "graphql-tag": "^2.9.2",
     "lodash": "^4.17.10",
     "npm-run-all": "^4.1.3",
