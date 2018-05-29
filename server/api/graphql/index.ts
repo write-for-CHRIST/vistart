@@ -1,1 +1,1 @@
-import {setup} from './init'
+export {setup, mutateBuilder} from './init'
