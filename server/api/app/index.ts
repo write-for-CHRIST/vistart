@@ -1,8 +1,9 @@
 import app from './app'
 
-const server = app.listen(3000, () => {
+const port = app.get('port')
+const server = app.listen(port, () => {
   console.log(`
-    App is running at http://localhost:${3000}
+    App is running at http://localhost:${port}
   `)
 })
 
