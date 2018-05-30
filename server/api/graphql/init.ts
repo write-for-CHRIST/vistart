@@ -10,7 +10,6 @@ const queries = {}
 
 interface IGraphClient {
   endpoint: string
-  appSecret: string
 }
 
 interface ISetupMutations {
@@ -35,9 +34,8 @@ interface IMutatePayload {
  * @description Simply create GraphQL Client with auth token.
  * @return {IGraphServer}
  */
-const createGraphQLClient = ({endpoint, appSecret}: IGraphClient) => {
-  const headers = {Authorization: `Bearer ${appSecret}`}
-  return new GraphQLClient(endpoint, {headers})
+const createGraphQLClient = ({endpoint}: IGraphClient) => {
+  return new GraphQLClient(endpoint)
 }
 
 /**
@@ -53,13 +51,12 @@ const setupMutations = ({client, mutations}: ISetupMutations): any[] => {
 /**
  * @description Setup GraphQL queries & mutations.
  * @param endpoint GraphQL Server Endpoint.
- * @param appSecret GraphQL JWT Secret.
  */
-export const setup = ({endpoint, appSecret}: IGraphClient) => {
-  console.log(endpoint, appSecret)
-  const client = createGraphQLClient({endpoint, appSecret})
+export const setup = ({endpoint}: IGraphClient) => {
+  const client = createGraphQLClient({endpoint})
   const mutates = setupMutations({client, mutations})
-  return {client, mutates}
+  const setHeader = (key: string, value: string) => client.setHeader(key, value)
+  return {client, setHeader, mutates}
 }
 
 /**
