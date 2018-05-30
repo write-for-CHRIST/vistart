@@ -17,15 +17,22 @@ type Profile {
   user: User! @relation(name: "UserProfile")
 }
 
+type Token {
+  id: ID! @unique
+  kind: AuthProvider!
+  accessToken: String!
+  user: User! @relation(name: "UserAuthToken")
+}
+
 type User {
   id: ID! @unique
   email: String! @unique
   password: String!
   passwordResetToken: String
   passwordResetExpires: DateTime
-  facebook: String
-  google: String
-  tokens: [String!]
+  facebook: String @unique
+  google: String @unique
+  tokens: [Token!]! @relation(name: "UserAuthToken")
   profile: Profile! @relation(name: "UserProfile")
   posts: [Post!]! @relation(name: "UserPosts")
 }

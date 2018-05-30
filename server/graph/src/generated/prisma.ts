@@ -10,8 +10,18 @@ type AggregateProfile {
   count: Int!
 }
 
+type AggregateToken {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
+}
+
+enum AuthProvider {
+  LOCAL
+  FACEBOOK
+  GOOGLE
 }
 
 type BatchPayload {
@@ -897,6 +907,286 @@ input ProfileWhereUniqueInput {
   id: ID
 }
 
+type Token implements Node {
+  id: ID!
+  kind: AuthProvider!
+  accessToken: String!
+  user(where: UserWhereInput): User!
+}
+
+"""
+A connection to a list of items.
+"""
+type TokenConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  A list of edges.
+  """
+  edges: [TokenEdge]!
+  aggregate: AggregateToken!
+}
+
+input TokenCreateInput {
+  kind: AuthProvider!
+  accessToken: String!
+  user: UserCreateOneWithoutTokensInput!
+}
+
+input TokenCreateManyWithoutUserInput {
+  create: [TokenCreateWithoutUserInput!]
+  connect: [TokenWhereUniqueInput!]
+}
+
+input TokenCreateWithoutUserInput {
+  kind: AuthProvider!
+  accessToken: String!
+}
+
+"""
+An edge in a connection.
+"""
+type TokenEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Token!
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum TokenOrderByInput {
+  id_ASC
+  id_DESC
+  kind_ASC
+  kind_DESC
+  accessToken_ASC
+  accessToken_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type TokenPreviousValues {
+  id: ID!
+  kind: AuthProvider!
+  accessToken: String!
+}
+
+type TokenSubscriptionPayload {
+  mutation: MutationType!
+  node: Token
+  updatedFields: [String!]
+  previousValues: TokenPreviousValues
+}
+
+input TokenSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [TokenSubscriptionWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [TokenSubscriptionWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [TokenSubscriptionWhereInput!]
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: TokenWhereInput
+}
+
+input TokenUpdateInput {
+  kind: AuthProvider
+  accessToken: String
+  user: UserUpdateOneWithoutTokensInput
+}
+
+input TokenUpdateManyWithoutUserInput {
+  create: [TokenCreateWithoutUserInput!]
+  connect: [TokenWhereUniqueInput!]
+  disconnect: [TokenWhereUniqueInput!]
+  delete: [TokenWhereUniqueInput!]
+  update: [TokenUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [TokenUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input TokenUpdateWithoutUserDataInput {
+  kind: AuthProvider
+  accessToken: String
+}
+
+input TokenUpdateWithWhereUniqueWithoutUserInput {
+  where: TokenWhereUniqueInput!
+  data: TokenUpdateWithoutUserDataInput!
+}
+
+input TokenUpsertWithWhereUniqueWithoutUserInput {
+  where: TokenWhereUniqueInput!
+  update: TokenUpdateWithoutUserDataInput!
+  create: TokenCreateWithoutUserInput!
+}
+
+input TokenWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [TokenWhereInput!]
+  """
+  Logical OR on all given filters.
+  """
+  OR: [TokenWhereInput!]
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [TokenWhereInput!]
+  id: ID
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  kind: AuthProvider
+  """
+  All values that are not equal to given value.
+  """
+  kind_not: AuthProvider
+  """
+  All values that are contained in given list.
+  """
+  kind_in: [AuthProvider!]
+  """
+  All values that are not contained in given list.
+  """
+  kind_not_in: [AuthProvider!]
+  accessToken: String
+  """
+  All values that are not equal to given value.
+  """
+  accessToken_not: String
+  """
+  All values that are contained in given list.
+  """
+  accessToken_in: [String!]
+  """
+  All values that are not contained in given list.
+  """
+  accessToken_not_in: [String!]
+  """
+  All values less than the given value.
+  """
+  accessToken_lt: String
+  """
+  All values less than or equal the given value.
+  """
+  accessToken_lte: String
+  """
+  All values greater than the given value.
+  """
+  accessToken_gt: String
+  """
+  All values greater than or equal the given value.
+  """
+  accessToken_gte: String
+  """
+  All values containing the given string.
+  """
+  accessToken_contains: String
+  """
+  All values not containing the given string.
+  """
+  accessToken_not_contains: String
+  """
+  All values starting with the given string.
+  """
+  accessToken_starts_with: String
+  """
+  All values not starting with the given string.
+  """
+  accessToken_not_starts_with: String
+  """
+  All values ending with the given string.
+  """
+  accessToken_ends_with: String
+  """
+  All values not ending with the given string.
+  """
+  accessToken_not_ends_with: String
+  user: UserWhereInput
+}
+
+input TokenWhereUniqueInput {
+  id: ID
+}
+
 type User implements Node {
   id: ID!
   email: String!
@@ -905,7 +1195,7 @@ type User implements Node {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: [String!]
+  tokens(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Token!]
   profile(where: ProfileWhereInput): Profile!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
 }
@@ -932,7 +1222,7 @@ input UserCreateInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserCreatetokensInput
+  tokens: TokenCreateManyWithoutUserInput
   profile: ProfileCreateOneWithoutUserInput!
   posts: PostCreateManyWithoutAuthorInput
 }
@@ -947,8 +1237,9 @@ input UserCreateOneWithoutProfileInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreatetokensInput {
-  set: [String!]
+input UserCreateOneWithoutTokensInput {
+  create: UserCreateWithoutTokensInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -958,7 +1249,7 @@ input UserCreateWithoutPostsInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserCreatetokensInput
+  tokens: TokenCreateManyWithoutUserInput
   profile: ProfileCreateOneWithoutUserInput!
 }
 
@@ -969,7 +1260,18 @@ input UserCreateWithoutProfileInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserCreatetokensInput
+  tokens: TokenCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutAuthorInput
+}
+
+input UserCreateWithoutTokensInput {
+  email: String!
+  password: String!
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  profile: ProfileCreateOneWithoutUserInput!
   posts: PostCreateManyWithoutAuthorInput
 }
 
@@ -1016,7 +1318,6 @@ type UserPreviousValues {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: [String!]
 }
 
 type UserSubscriptionPayload {
@@ -1065,7 +1366,7 @@ input UserUpdateInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserUpdatetokensInput
+  tokens: TokenUpdateManyWithoutUserInput
   profile: ProfileUpdateOneWithoutUserInput
   posts: PostUpdateManyWithoutAuthorInput
 }
@@ -1086,8 +1387,12 @@ input UserUpdateOneWithoutProfileInput {
   upsert: UserUpsertWithoutProfileInput
 }
 
-input UserUpdatetokensInput {
-  set: [String!]
+input UserUpdateOneWithoutTokensInput {
+  create: UserCreateWithoutTokensInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutTokensDataInput
+  upsert: UserUpsertWithoutTokensInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -1097,7 +1402,7 @@ input UserUpdateWithoutPostsDataInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserUpdatetokensInput
+  tokens: TokenUpdateManyWithoutUserInput
   profile: ProfileUpdateOneWithoutUserInput
 }
 
@@ -1108,7 +1413,18 @@ input UserUpdateWithoutProfileDataInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserUpdatetokensInput
+  tokens: TokenUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateWithoutTokensDataInput {
+  email: String
+  password: String
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  profile: ProfileUpdateOneWithoutUserInput
   posts: PostUpdateManyWithoutAuthorInput
 }
 
@@ -1120,6 +1436,11 @@ input UserUpsertWithoutPostsInput {
 input UserUpsertWithoutProfileInput {
   update: UserUpdateWithoutProfileDataInput!
   create: UserCreateWithoutProfileInput!
+}
+
+input UserUpsertWithoutTokensInput {
+  update: UserUpdateWithoutTokensDataInput!
+  create: UserCreateWithoutTokensInput!
 }
 
 input UserWhereInput {
@@ -1482,6 +1803,9 @@ input UserWhereInput {
   All values not ending with the given string.
   """
   google_not_ends_with: String
+  tokens_every: TokenWhereInput
+  tokens_some: TokenWhereInput
+  tokens_none: TokenWhereInput
   profile: ProfileWhereInput
   posts_every: PostWhereInput
   posts_some: PostWhereInput
@@ -1491,38 +1815,49 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+  facebook: String
+  google: String
 }
 
 type Mutation {
   createPost(data: PostCreateInput!): Post!
   createProfile(data: ProfileCreateInput!): Profile!
+  createToken(data: TokenCreateInput!): Token!
   createUser(data: UserCreateInput!): User!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateProfile(data: ProfileUpdateInput!, where: ProfileWhereUniqueInput!): Profile
+  updateToken(data: TokenUpdateInput!, where: TokenWhereUniqueInput!): Token
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deletePost(where: PostWhereUniqueInput!): Post
   deleteProfile(where: ProfileWhereUniqueInput!): Profile
+  deleteToken(where: TokenWhereUniqueInput!): Token
   deleteUser(where: UserWhereUniqueInput!): User
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertProfile(where: ProfileWhereUniqueInput!, create: ProfileCreateInput!, update: ProfileUpdateInput!): Profile!
+  upsertToken(where: TokenWhereUniqueInput!, create: TokenCreateInput!, update: TokenUpdateInput!): Token!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyProfiles(data: ProfileUpdateInput!, where: ProfileWhereInput): BatchPayload!
+  updateManyTokens(data: TokenUpdateInput!, where: TokenWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
+  deleteManyTokens(where: TokenWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
 type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile]!
+  tokens(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Token]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   post(where: PostWhereUniqueInput!): Post
   profile(where: ProfileWhereUniqueInput!): Profile
+  token(where: TokenWhereUniqueInput!): Token
   user(where: UserWhereUniqueInput!): User
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   profilesConnection(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileConnection!
+  tokensConnection(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TokenConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   """
   Fetches an object given its ID
@@ -1536,9 +1871,15 @@ type Query {
 type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
+  token(where: TokenSubscriptionWhereInput): TokenSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 `
+
+export type AuthProvider = 
+  'LOCAL' |
+  'FACEBOOK' |
+  'GOOGLE'
 
 export type PostOrderByInput = 
   'id_ASC' |
@@ -1553,6 +1894,18 @@ export type PostOrderByInput =
   'title_DESC' |
   'text_ASC' |
   'text_DESC'
+
+export type TokenOrderByInput = 
+  'id_ASC' |
+  'id_DESC' |
+  'kind_ASC' |
+  'kind_DESC' |
+  'accessToken_ASC' |
+  'accessToken_DESC' |
+  'updatedAt_ASC' |
+  'updatedAt_DESC' |
+  'createdAt_ASC' |
+  'createdAt_DESC'
 
 export type ProfileOrderByInput = 
   'id_ASC' |
@@ -1595,12 +1948,15 @@ export type MutationType =
   'UPDATED' |
   'DELETED'
 
-export interface ProfileCreateInput {
-  name?: String
-  gender?: String
-  location?: String
-  picture?: String
-  user: UserCreateOneWithoutProfileInput
+export interface UserCreateWithoutProfileInput {
+  email: String
+  password: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: TokenCreateManyWithoutUserInput
+  posts?: PostCreateManyWithoutAuthorInput
 }
 
 export interface PostWhereInput {
@@ -1670,9 +2026,9 @@ export interface PostWhereInput {
   author?: UserWhereInput
 }
 
-export interface PostCreateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput
+export interface UserCreateOneWithoutTokensInput {
+  create?: UserCreateWithoutTokensInput
+  connect?: UserWhereUniqueInput
 }
 
 export interface ProfileWhereInput {
@@ -1757,19 +2113,12 @@ export interface UserUpsertWithoutPostsInput {
   create: UserCreateWithoutPostsInput
 }
 
-export interface UserUpdatetokensInput {
-  set?: String[] | String
-}
-
-export interface ProfileUpsertWithoutUserInput {
-  update: ProfileUpdateWithoutUserDataInput
-  create: ProfileCreateWithoutUserInput
-}
-
-export interface PostCreateWithoutAuthorInput {
-  isPublished?: Boolean
-  title: String
-  text: String
+export interface ProfileUpdateOneWithoutUserInput {
+  create?: ProfileCreateWithoutUserInput
+  connect?: ProfileWhereUniqueInput
+  delete?: Boolean
+  update?: ProfileUpdateWithoutUserDataInput
+  upsert?: ProfileUpsertWithoutUserInput
 }
 
 export interface PostCreateInput {
@@ -1777,6 +2126,22 @@ export interface PostCreateInput {
   title: String
   text: String
   author: UserCreateOneWithoutPostsInput
+}
+
+export interface UserCreateWithoutTokensInput {
+  email: String
+  password: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  profile: ProfileCreateOneWithoutUserInput
+  posts?: PostCreateManyWithoutAuthorInput
+}
+
+export interface UserCreateOneWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput
+  connect?: UserWhereUniqueInput
 }
 
 export interface UserSubscriptionWhereInput {
@@ -1790,9 +2155,31 @@ export interface UserSubscriptionWhereInput {
   node?: UserWhereInput
 }
 
-export interface UserCreateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput
-  connect?: UserWhereUniqueInput
+export interface UserCreateWithoutPostsInput {
+  email: String
+  password: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: TokenCreateManyWithoutUserInput
+  profile: ProfileCreateOneWithoutUserInput
+}
+
+export interface TokenSubscriptionWhereInput {
+  AND?: TokenSubscriptionWhereInput[] | TokenSubscriptionWhereInput
+  OR?: TokenSubscriptionWhereInput[] | TokenSubscriptionWhereInput
+  NOT?: TokenSubscriptionWhereInput[] | TokenSubscriptionWhereInput
+  mutation_in?: MutationType[] | MutationType
+  updatedFields_contains?: String
+  updatedFields_contains_every?: String[] | String
+  updatedFields_contains_some?: String[] | String
+  node?: TokenWhereInput
+}
+
+export interface TokenCreateManyWithoutUserInput {
+  create?: TokenCreateWithoutUserInput[] | TokenCreateWithoutUserInput
+  connect?: TokenWhereUniqueInput[] | TokenWhereUniqueInput
 }
 
 export interface PostSubscriptionWhereInput {
@@ -1806,28 +2193,13 @@ export interface PostSubscriptionWhereInput {
   node?: PostWhereInput
 }
 
-export interface UserCreateWithoutPostsInput {
-  email: String
-  password: String
-  passwordResetToken?: String
-  passwordResetExpires?: DateTime
-  facebook?: String
-  google?: String
-  tokens?: UserCreatetokensInput
-  profile: ProfileCreateOneWithoutUserInput
+export interface TokenCreateWithoutUserInput {
+  kind: AuthProvider
+  accessToken: String
 }
 
 export interface PostWhereUniqueInput {
   id?: ID_Input
-}
-
-export interface UserCreatetokensInput {
-  set?: String[] | String
-}
-
-export interface UserWhereUniqueInput {
-  id?: ID_Input
-  email?: String
 }
 
 export interface ProfileCreateOneWithoutUserInput {
@@ -1835,10 +2207,8 @@ export interface ProfileCreateOneWithoutUserInput {
   connect?: ProfileWhereUniqueInput
 }
 
-export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput
-  update: PostUpdateWithoutAuthorDataInput
-  create: PostCreateWithoutAuthorInput
+export interface TokenWhereUniqueInput {
+  id?: ID_Input
 }
 
 export interface ProfileCreateWithoutUserInput {
@@ -1848,27 +2218,25 @@ export interface ProfileCreateWithoutUserInput {
   picture?: String
 }
 
-export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput
-  data: PostUpdateWithoutAuthorDataInput
+export interface UserUpsertWithoutTokensInput {
+  update: UserUpdateWithoutTokensDataInput
+  create: UserCreateWithoutTokensInput
 }
 
-export interface ProfileUpdateWithoutUserDataInput {
+export interface ProfileCreateInput {
   name?: String
   gender?: String
   location?: String
   picture?: String
+  user: UserCreateOneWithoutProfileInput
 }
 
-export interface UserUpdateWithoutProfileDataInput {
-  email?: String
-  password?: String
-  passwordResetToken?: String
-  passwordResetExpires?: DateTime
-  facebook?: String
-  google?: String
-  tokens?: UserUpdatetokensInput
-  posts?: PostUpdateManyWithoutAuthorInput
+export interface UserUpdateOneWithoutTokensInput {
+  create?: UserCreateWithoutTokensInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutTokensDataInput
+  upsert?: UserUpsertWithoutTokensInput
 }
 
 export interface UserCreateOneWithoutProfileInput {
@@ -1876,23 +2244,54 @@ export interface UserCreateOneWithoutProfileInput {
   connect?: UserWhereUniqueInput
 }
 
-export interface ProfileUpdateInput {
-  name?: String
-  gender?: String
-  location?: String
-  picture?: String
-  user?: UserUpdateOneWithoutProfileInput
+export interface UserUpsertWithoutProfileInput {
+  update: UserUpdateWithoutProfileDataInput
+  create: UserCreateWithoutProfileInput
 }
 
-export interface UserCreateWithoutProfileInput {
-  email: String
-  password: String
-  passwordResetToken?: String
-  passwordResetExpires?: DateTime
-  facebook?: String
-  google?: String
-  tokens?: UserCreatetokensInput
-  posts?: PostCreateManyWithoutAuthorInput
+export interface ProfileUpsertWithoutUserInput {
+  update: ProfileUpdateWithoutUserDataInput
+  create: ProfileCreateWithoutUserInput
+}
+
+export interface PostUpdateWithoutAuthorDataInput {
+  isPublished?: Boolean
+  title?: String
+  text?: String
+}
+
+export interface PostCreateManyWithoutAuthorInput {
+  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput
+  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput
+}
+
+export interface PostUpdateManyWithoutAuthorInput {
+  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput
+  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput
+  disconnect?: PostWhereUniqueInput[] | PostWhereUniqueInput
+  delete?: PostWhereUniqueInput[] | PostWhereUniqueInput
+  update?: PostUpdateWithWhereUniqueWithoutAuthorInput[] | PostUpdateWithWhereUniqueWithoutAuthorInput
+  upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput[] | PostUpsertWithWhereUniqueWithoutAuthorInput
+}
+
+export interface PostCreateWithoutAuthorInput {
+  isPublished?: Boolean
+  title: String
+  text: String
+}
+
+export interface UserUpdateOneWithoutProfileInput {
+  create?: UserCreateWithoutProfileInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutProfileDataInput
+  upsert?: UserUpsertWithoutProfileInput
+}
+
+export interface TokenCreateInput {
+  kind: AuthProvider
+  accessToken: String
+  user: UserCreateOneWithoutTokensInput
 }
 
 export interface ProfileSubscriptionWhereInput {
@@ -1904,6 +2303,111 @@ export interface ProfileSubscriptionWhereInput {
   updatedFields_contains_every?: String[] | String
   updatedFields_contains_some?: String[] | String
   node?: ProfileWhereInput
+}
+
+export interface TokenWhereInput {
+  AND?: TokenWhereInput[] | TokenWhereInput
+  OR?: TokenWhereInput[] | TokenWhereInput
+  NOT?: TokenWhereInput[] | TokenWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  kind?: AuthProvider
+  kind_not?: AuthProvider
+  kind_in?: AuthProvider[] | AuthProvider
+  kind_not_in?: AuthProvider[] | AuthProvider
+  accessToken?: String
+  accessToken_not?: String
+  accessToken_in?: String[] | String
+  accessToken_not_in?: String[] | String
+  accessToken_lt?: String
+  accessToken_lte?: String
+  accessToken_gt?: String
+  accessToken_gte?: String
+  accessToken_contains?: String
+  accessToken_not_contains?: String
+  accessToken_starts_with?: String
+  accessToken_not_starts_with?: String
+  accessToken_ends_with?: String
+  accessToken_not_ends_with?: String
+  user?: UserWhereInput
+}
+
+export interface ProfileWhereUniqueInput {
+  id?: ID_Input
+}
+
+export interface ProfileUpdateWithoutUserDataInput {
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+}
+
+export interface UserUpdateWithoutTokensDataInput {
+  email?: String
+  password?: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  profile?: ProfileUpdateOneWithoutUserInput
+  posts?: PostUpdateManyWithoutAuthorInput
+}
+
+export interface UserCreateInput {
+  email: String
+  password: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: TokenCreateManyWithoutUserInput
+  profile: ProfileCreateOneWithoutUserInput
+  posts?: PostCreateManyWithoutAuthorInput
+}
+
+export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput
+  update: PostUpdateWithoutAuthorDataInput
+  create: PostCreateWithoutAuthorInput
+}
+
+export interface PostUpdateInput {
+  isPublished?: Boolean
+  title?: String
+  text?: String
+  author?: UserUpdateOneWithoutPostsInput
+}
+
+export interface UserUpdateWithoutProfileDataInput {
+  email?: String
+  password?: String
+  passwordResetToken?: String
+  passwordResetExpires?: DateTime
+  facebook?: String
+  google?: String
+  tokens?: TokenUpdateManyWithoutUserInput
+  posts?: PostUpdateManyWithoutAuthorInput
+}
+
+export interface UserUpdateOneWithoutPostsInput {
+  create?: UserCreateWithoutPostsInput
+  connect?: UserWhereUniqueInput
+  delete?: Boolean
+  update?: UserUpdateWithoutPostsDataInput
+  upsert?: UserUpsertWithoutPostsInput
 }
 
 export interface UserWhereInput {
@@ -2002,36 +2506,13 @@ export interface UserWhereInput {
   google_not_starts_with?: String
   google_ends_with?: String
   google_not_ends_with?: String
+  tokens_every?: TokenWhereInput
+  tokens_some?: TokenWhereInput
+  tokens_none?: TokenWhereInput
   profile?: ProfileWhereInput
   posts_every?: PostWhereInput
   posts_some?: PostWhereInput
   posts_none?: PostWhereInput
-}
-
-export interface ProfileWhereUniqueInput {
-  id?: ID_Input
-}
-
-export interface ProfileUpdateOneWithoutUserInput {
-  create?: ProfileCreateWithoutUserInput
-  connect?: ProfileWhereUniqueInput
-  delete?: Boolean
-  update?: ProfileUpdateWithoutUserDataInput
-  upsert?: ProfileUpsertWithoutUserInput
-}
-
-export interface PostUpdateWithoutAuthorDataInput {
-  isPublished?: Boolean
-  title?: String
-  text?: String
-}
-
-export interface UserUpdateOneWithoutProfileInput {
-  create?: UserCreateWithoutProfileInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutProfileDataInput
-  upsert?: UserUpsertWithoutProfileInput
 }
 
 export interface UserUpdateWithoutPostsDataInput {
@@ -2041,49 +2522,46 @@ export interface UserUpdateWithoutPostsDataInput {
   passwordResetExpires?: DateTime
   facebook?: String
   google?: String
-  tokens?: UserUpdatetokensInput
+  tokens?: TokenUpdateManyWithoutUserInput
   profile?: ProfileUpdateOneWithoutUserInput
 }
 
-export interface UserUpdateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput
-  connect?: UserWhereUniqueInput
-  delete?: Boolean
-  update?: UserUpdateWithoutPostsDataInput
-  upsert?: UserUpsertWithoutPostsInput
-}
-
-export interface PostUpdateInput {
-  isPublished?: Boolean
-  title?: String
-  text?: String
-  author?: UserUpdateOneWithoutPostsInput
-}
-
-export interface UserCreateInput {
-  email: String
-  password: String
-  passwordResetToken?: String
-  passwordResetExpires?: DateTime
+export interface UserWhereUniqueInput {
+  id?: ID_Input
+  email?: String
   facebook?: String
   google?: String
-  tokens?: UserCreatetokensInput
-  profile: ProfileCreateOneWithoutUserInput
-  posts?: PostCreateManyWithoutAuthorInput
 }
 
-export interface PostUpdateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput
-  disconnect?: PostWhereUniqueInput[] | PostWhereUniqueInput
-  delete?: PostWhereUniqueInput[] | PostWhereUniqueInput
-  update?: PostUpdateWithWhereUniqueWithoutAuthorInput[] | PostUpdateWithWhereUniqueWithoutAuthorInput
-  upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput[] | PostUpsertWithWhereUniqueWithoutAuthorInput
+export interface TokenUpsertWithWhereUniqueWithoutUserInput {
+  where: TokenWhereUniqueInput
+  update: TokenUpdateWithoutUserDataInput
+  create: TokenCreateWithoutUserInput
 }
 
-export interface UserUpsertWithoutProfileInput {
-  update: UserUpdateWithoutProfileDataInput
-  create: UserCreateWithoutProfileInput
+export interface TokenUpdateWithoutUserDataInput {
+  kind?: AuthProvider
+  accessToken?: String
+}
+
+export interface TokenUpdateWithWhereUniqueWithoutUserInput {
+  where: TokenWhereUniqueInput
+  data: TokenUpdateWithoutUserDataInput
+}
+
+export interface TokenUpdateManyWithoutUserInput {
+  create?: TokenCreateWithoutUserInput[] | TokenCreateWithoutUserInput
+  connect?: TokenWhereUniqueInput[] | TokenWhereUniqueInput
+  disconnect?: TokenWhereUniqueInput[] | TokenWhereUniqueInput
+  delete?: TokenWhereUniqueInput[] | TokenWhereUniqueInput
+  update?: TokenUpdateWithWhereUniqueWithoutUserInput[] | TokenUpdateWithWhereUniqueWithoutUserInput
+  upsert?: TokenUpsertWithWhereUniqueWithoutUserInput[] | TokenUpsertWithWhereUniqueWithoutUserInput
+}
+
+export interface TokenUpdateInput {
+  kind?: AuthProvider
+  accessToken?: String
+  user?: UserUpdateOneWithoutTokensInput
 }
 
 export interface UserUpdateInput {
@@ -2093,9 +2571,22 @@ export interface UserUpdateInput {
   passwordResetExpires?: DateTime
   facebook?: String
   google?: String
-  tokens?: UserUpdatetokensInput
+  tokens?: TokenUpdateManyWithoutUserInput
   profile?: ProfileUpdateOneWithoutUserInput
   posts?: PostUpdateManyWithoutAuthorInput
+}
+
+export interface ProfileUpdateInput {
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+  user?: UserUpdateOneWithoutProfileInput
+}
+
+export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput
+  data: PostUpdateWithoutAuthorDataInput
 }
 
 /*
@@ -2114,7 +2605,6 @@ export interface UserPreviousValues {
   passwordResetExpires?: DateTime
   facebook?: String
   google?: String
-  tokens?: String[]
 }
 
 /*
@@ -2128,12 +2618,10 @@ export interface PageInfo {
   endCursor?: String
 }
 
-export interface Profile extends Node {
+export interface Token extends Node {
   id: ID_Output
-  name?: String
-  gender?: String
-  location?: String
-  picture?: String
+  kind: AuthProvider
+  accessToken: String
   user: User
 }
 
@@ -2177,7 +2665,7 @@ export interface BatchPayload {
   count: Long
 }
 
-export interface AggregateProfile {
+export interface AggregateToken {
   count: Int
 }
 
@@ -2189,7 +2677,7 @@ export interface User extends Node {
   passwordResetExpires?: DateTime
   facebook?: String
   google?: String
-  tokens?: String[]
+  tokens?: Token[]
   profile: Profile
   posts?: Post[]
 }
@@ -2198,58 +2686,16 @@ export interface User extends Node {
  * A connection to a list of items.
 
  */
-export interface ProfileConnection {
+export interface TokenConnection {
   pageInfo: PageInfo
-  edges: ProfileEdge[]
-  aggregate: AggregateProfile
+  edges: TokenEdge[]
+  aggregate: AggregateToken
 }
 
-/*
- * An edge in a connection.
-
- */
-export interface PostEdge {
-  node: Post
-  cursor: String
-}
-
-export interface PostPreviousValues {
+export interface TokenPreviousValues {
   id: ID_Output
-  createdAt: DateTime
-  updatedAt: DateTime
-  isPublished: Boolean
-  title: String
-  text: String
-}
-
-export interface PostSubscriptionPayload {
-  mutation: MutationType
-  node?: Post
-  updatedFields?: String[]
-  previousValues?: PostPreviousValues
-}
-
-export interface ProfileSubscriptionPayload {
-  mutation: MutationType
-  node?: Profile
-  updatedFields?: String[]
-  previousValues?: ProfilePreviousValues
-}
-
-export interface ProfilePreviousValues {
-  id: ID_Output
-  name?: String
-  gender?: String
-  location?: String
-  picture?: String
-}
-
-export interface AggregateUser {
-  count: Int
-}
-
-export interface AggregatePost {
-  count: Int
+  kind: AuthProvider
+  accessToken: String
 }
 
 /*
@@ -2261,6 +2707,74 @@ export interface ProfileEdge {
   cursor: String
 }
 
+export interface TokenSubscriptionPayload {
+  mutation: MutationType
+  node?: Token
+  updatedFields?: String[]
+  previousValues?: TokenPreviousValues
+}
+
+export interface AggregatePost {
+  count: Int
+}
+
+export interface PostSubscriptionPayload {
+  mutation: MutationType
+  node?: Post
+  updatedFields?: String[]
+  previousValues?: PostPreviousValues
+}
+
+export interface AggregateUser {
+  count: Int
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface TokenEdge {
+  node: Token
+  cursor: String
+}
+
+export interface ProfilePreviousValues {
+  id: ID_Output
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+}
+
+export interface ProfileSubscriptionPayload {
+  mutation: MutationType
+  node?: Profile
+  updatedFields?: String[]
+  previousValues?: ProfilePreviousValues
+}
+
+export interface Profile extends Node {
+  id: ID_Output
+  name?: String
+  gender?: String
+  location?: String
+  picture?: String
+  user: User
+}
+
+export interface PostPreviousValues {
+  id: ID_Output
+  createdAt: DateTime
+  updatedAt: DateTime
+  isPublished: Boolean
+  title: String
+  text: String
+}
+
+export interface AggregateProfile {
+  count: Int
+}
+
 /*
  * A connection to a list of items.
 
@@ -2269,6 +2783,25 @@ export interface UserConnection {
   pageInfo: PageInfo
   edges: UserEdge[]
   aggregate: AggregateUser
+}
+
+/*
+ * An edge in a connection.
+
+ */
+export interface PostEdge {
+  node: Post
+  cursor: String
+}
+
+/*
+ * A connection to a list of items.
+
+ */
+export interface ProfileConnection {
+  pageInfo: PageInfo
+  edges: ProfileEdge[]
+  aggregate: AggregateProfile
 }
 
 /*
@@ -2309,12 +2842,15 @@ export interface Schema {
 export type Query = {
   posts: (args: { where?: PostWhereInput, orderBy?: PostOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Post[]>
   profiles: (args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Profile[]>
+  tokens: (args: { where?: TokenWhereInput, orderBy?: TokenOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Token[]>
   users: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<User[]>
   post: (args: { where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Post | null>
   profile: (args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Profile | null>
+  token: (args: { where: TokenWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Token | null>
   user: (args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
   postsConnection: (args: { where?: PostWhereInput, orderBy?: PostOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<PostConnection>
   profilesConnection: (args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<ProfileConnection>
+  tokensConnection: (args: { where?: TokenWhereInput, orderBy?: TokenOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<TokenConnection>
   usersConnection: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<UserConnection>
   node: (args: { id: ID_Output }, info?: GraphQLResolveInfo | string) => Promise<Node | null>
 }
@@ -2322,27 +2858,34 @@ export type Query = {
 export type Mutation = {
   createPost: (args: { data: PostCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Post>
   createProfile: (args: { data: ProfileCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Profile>
+  createToken: (args: { data: TokenCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Token>
   createUser: (args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string) => Promise<User>
   updatePost: (args: { data: PostUpdateInput, where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Post | null>
   updateProfile: (args: { data: ProfileUpdateInput, where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Profile | null>
+  updateToken: (args: { data: TokenUpdateInput, where: TokenWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Token | null>
   updateUser: (args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
   deletePost: (args: { where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Post | null>
   deleteProfile: (args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Profile | null>
+  deleteToken: (args: { where: TokenWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Token | null>
   deleteUser: (args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
   upsertPost: (args: { where: PostWhereUniqueInput, create: PostCreateInput, update: PostUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Post>
   upsertProfile: (args: { where: ProfileWhereUniqueInput, create: ProfileCreateInput, update: ProfileUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Profile>
+  upsertToken: (args: { where: TokenWhereUniqueInput, create: TokenCreateInput, update: TokenUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Token>
   upsertUser: (args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<User>
   updateManyPosts: (args: { data: PostUpdateInput, where?: PostWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   updateManyProfiles: (args: { data: ProfileUpdateInput, where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
+  updateManyTokens: (args: { data: TokenUpdateInput, where?: TokenWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   updateManyUsers: (args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManyPosts: (args: { where?: PostWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManyProfiles: (args: { where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
+  deleteManyTokens: (args: { where?: TokenWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
   deleteManyUsers: (args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
 }
 
 export type Subscription = {
   post: (args: { where?: PostSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<PostSubscriptionPayload>>
   profile: (args: { where?: ProfileSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<ProfileSubscriptionPayload>>
+  token: (args: { where?: TokenSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<TokenSubscriptionPayload>>
   user: (args: { where?: UserSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<UserSubscriptionPayload>>
 }
 
@@ -2355,18 +2898,22 @@ export class Prisma extends BasePrisma {
   exists = {
     Post: (where: PostWhereInput): Promise<boolean> => super.existsDelegate('query', 'posts', { where }, {}, '{ id }'),
     Profile: (where: ProfileWhereInput): Promise<boolean> => super.existsDelegate('query', 'profiles', { where }, {}, '{ id }'),
+    Token: (where: TokenWhereInput): Promise<boolean> => super.existsDelegate('query', 'tokens', { where }, {}, '{ id }'),
     User: (where: UserWhereInput): Promise<boolean> => super.existsDelegate('query', 'users', { where }, {}, '{ id }')
   }
 
   query: Query = {
     posts: (args, info): Promise<Post[]> => super.delegate('query', 'posts', args, {}, info),
     profiles: (args, info): Promise<Profile[]> => super.delegate('query', 'profiles', args, {}, info),
+    tokens: (args, info): Promise<Token[]> => super.delegate('query', 'tokens', args, {}, info),
     users: (args, info): Promise<User[]> => super.delegate('query', 'users', args, {}, info),
     post: (args, info): Promise<Post | null> => super.delegate('query', 'post', args, {}, info),
     profile: (args, info): Promise<Profile | null> => super.delegate('query', 'profile', args, {}, info),
+    token: (args, info): Promise<Token | null> => super.delegate('query', 'token', args, {}, info),
     user: (args, info): Promise<User | null> => super.delegate('query', 'user', args, {}, info),
     postsConnection: (args, info): Promise<PostConnection> => super.delegate('query', 'postsConnection', args, {}, info),
     profilesConnection: (args, info): Promise<ProfileConnection> => super.delegate('query', 'profilesConnection', args, {}, info),
+    tokensConnection: (args, info): Promise<TokenConnection> => super.delegate('query', 'tokensConnection', args, {}, info),
     usersConnection: (args, info): Promise<UserConnection> => super.delegate('query', 'usersConnection', args, {}, info),
     node: (args, info): Promise<Node | null> => super.delegate('query', 'node', args, {}, info)
   }
@@ -2374,27 +2921,34 @@ export class Prisma extends BasePrisma {
   mutation: Mutation = {
     createPost: (args, info): Promise<Post> => super.delegate('mutation', 'createPost', args, {}, info),
     createProfile: (args, info): Promise<Profile> => super.delegate('mutation', 'createProfile', args, {}, info),
+    createToken: (args, info): Promise<Token> => super.delegate('mutation', 'createToken', args, {}, info),
     createUser: (args, info): Promise<User> => super.delegate('mutation', 'createUser', args, {}, info),
     updatePost: (args, info): Promise<Post | null> => super.delegate('mutation', 'updatePost', args, {}, info),
     updateProfile: (args, info): Promise<Profile | null> => super.delegate('mutation', 'updateProfile', args, {}, info),
+    updateToken: (args, info): Promise<Token | null> => super.delegate('mutation', 'updateToken', args, {}, info),
     updateUser: (args, info): Promise<User | null> => super.delegate('mutation', 'updateUser', args, {}, info),
     deletePost: (args, info): Promise<Post | null> => super.delegate('mutation', 'deletePost', args, {}, info),
     deleteProfile: (args, info): Promise<Profile | null> => super.delegate('mutation', 'deleteProfile', args, {}, info),
+    deleteToken: (args, info): Promise<Token | null> => super.delegate('mutation', 'deleteToken', args, {}, info),
     deleteUser: (args, info): Promise<User | null> => super.delegate('mutation', 'deleteUser', args, {}, info),
     upsertPost: (args, info): Promise<Post> => super.delegate('mutation', 'upsertPost', args, {}, info),
     upsertProfile: (args, info): Promise<Profile> => super.delegate('mutation', 'upsertProfile', args, {}, info),
+    upsertToken: (args, info): Promise<Token> => super.delegate('mutation', 'upsertToken', args, {}, info),
     upsertUser: (args, info): Promise<User> => super.delegate('mutation', 'upsertUser', args, {}, info),
     updateManyPosts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyPosts', args, {}, info),
     updateManyProfiles: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyProfiles', args, {}, info),
+    updateManyTokens: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyTokens', args, {}, info),
     updateManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyUsers', args, {}, info),
     deleteManyPosts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyPosts', args, {}, info),
     deleteManyProfiles: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyProfiles', args, {}, info),
+    deleteManyTokens: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyTokens', args, {}, info),
     deleteManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyUsers', args, {}, info)
   }
 
   subscription: Subscription = {
     post: (args, infoOrQuery): Promise<AsyncIterator<PostSubscriptionPayload>> => super.delegateSubscription('post', args, {}, infoOrQuery),
     profile: (args, infoOrQuery): Promise<AsyncIterator<ProfileSubscriptionPayload>> => super.delegateSubscription('profile', args, {}, infoOrQuery),
+    token: (args, infoOrQuery): Promise<AsyncIterator<TokenSubscriptionPayload>> => super.delegateSubscription('token', args, {}, infoOrQuery),
     user: (args, infoOrQuery): Promise<AsyncIterator<UserSubscriptionPayload>> => super.delegateSubscription('user', args, {}, infoOrQuery)
   }
 }

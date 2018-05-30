@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Mon May 21 2018 11:10:43 GMT+0700 (+07)
+# timestamp: Wed May 30 2018 22:41:58 GMT+0700 (+07)
 
 type AggregatePost {
   count: Int!
@@ -9,8 +9,18 @@ type AggregateProfile {
   count: Int!
 }
 
+type AggregateToken {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
+}
+
+enum AuthProvider {
+  LOCAL
+  FACEBOOK
+  GOOGLE
 }
 
 type BatchPayload {
@@ -29,21 +39,27 @@ scalar Long
 type Mutation {
   createPost(data: PostCreateInput!): Post!
   createProfile(data: ProfileCreateInput!): Profile!
+  createToken(data: TokenCreateInput!): Token!
   createUser(data: UserCreateInput!): User!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateProfile(data: ProfileUpdateInput!, where: ProfileWhereUniqueInput!): Profile
+  updateToken(data: TokenUpdateInput!, where: TokenWhereUniqueInput!): Token
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deletePost(where: PostWhereUniqueInput!): Post
   deleteProfile(where: ProfileWhereUniqueInput!): Profile
+  deleteToken(where: TokenWhereUniqueInput!): Token
   deleteUser(where: UserWhereUniqueInput!): User
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   upsertProfile(where: ProfileWhereUniqueInput!, create: ProfileCreateInput!, update: ProfileUpdateInput!): Profile!
+  upsertToken(where: TokenWhereUniqueInput!, create: TokenCreateInput!, update: TokenUpdateInput!): Token!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   updateManyProfiles(data: ProfileUpdateInput!, where: ProfileWhereInput): BatchPayload!
+  updateManyTokens(data: TokenUpdateInput!, where: TokenWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
   deleteManyPosts(where: PostWhereInput): BatchPayload!
   deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
+  deleteManyTokens(where: TokenWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
@@ -760,12 +776,15 @@ input ProfileWhereUniqueInput {
 type Query {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile]!
+  tokens(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Token]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   post(where: PostWhereUniqueInput!): Post
   profile(where: ProfileWhereUniqueInput!): Profile
+  token(where: TokenWhereUniqueInput!): Token
   user(where: UserWhereUniqueInput!): User
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   profilesConnection(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileConnection!
+  tokensConnection(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TokenConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
@@ -778,7 +797,245 @@ type Query {
 type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
+  token(where: TokenSubscriptionWhereInput): TokenSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type Token implements Node {
+  id: ID!
+  kind: AuthProvider!
+  accessToken: String!
+  user(where: UserWhereInput): User!
+}
+
+"""A connection to a list of items."""
+type TokenConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [TokenEdge]!
+  aggregate: AggregateToken!
+}
+
+input TokenCreateInput {
+  kind: AuthProvider!
+  accessToken: String!
+  user: UserCreateOneWithoutTokensInput!
+}
+
+input TokenCreateManyWithoutUserInput {
+  create: [TokenCreateWithoutUserInput!]
+  connect: [TokenWhereUniqueInput!]
+}
+
+input TokenCreateWithoutUserInput {
+  kind: AuthProvider!
+  accessToken: String!
+}
+
+"""An edge in a connection."""
+type TokenEdge {
+  """The item at the end of the edge."""
+  node: Token!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum TokenOrderByInput {
+  id_ASC
+  id_DESC
+  kind_ASC
+  kind_DESC
+  accessToken_ASC
+  accessToken_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type TokenPreviousValues {
+  id: ID!
+  kind: AuthProvider!
+  accessToken: String!
+}
+
+type TokenSubscriptionPayload {
+  mutation: MutationType!
+  node: Token
+  updatedFields: [String!]
+  previousValues: TokenPreviousValues
+}
+
+input TokenSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TokenSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TokenSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TokenSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: TokenWhereInput
+}
+
+input TokenUpdateInput {
+  kind: AuthProvider
+  accessToken: String
+  user: UserUpdateOneWithoutTokensInput
+}
+
+input TokenUpdateManyWithoutUserInput {
+  create: [TokenCreateWithoutUserInput!]
+  connect: [TokenWhereUniqueInput!]
+  disconnect: [TokenWhereUniqueInput!]
+  delete: [TokenWhereUniqueInput!]
+  update: [TokenUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [TokenUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input TokenUpdateWithoutUserDataInput {
+  kind: AuthProvider
+  accessToken: String
+}
+
+input TokenUpdateWithWhereUniqueWithoutUserInput {
+  where: TokenWhereUniqueInput!
+  data: TokenUpdateWithoutUserDataInput!
+}
+
+input TokenUpsertWithWhereUniqueWithoutUserInput {
+  where: TokenWhereUniqueInput!
+  update: TokenUpdateWithoutUserDataInput!
+  create: TokenCreateWithoutUserInput!
+}
+
+input TokenWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TokenWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TokenWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TokenWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  kind: AuthProvider
+
+  """All values that are not equal to given value."""
+  kind_not: AuthProvider
+
+  """All values that are contained in given list."""
+  kind_in: [AuthProvider!]
+
+  """All values that are not contained in given list."""
+  kind_not_in: [AuthProvider!]
+  accessToken: String
+
+  """All values that are not equal to given value."""
+  accessToken_not: String
+
+  """All values that are contained in given list."""
+  accessToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  accessToken_not_in: [String!]
+
+  """All values less than the given value."""
+  accessToken_lt: String
+
+  """All values less than or equal the given value."""
+  accessToken_lte: String
+
+  """All values greater than the given value."""
+  accessToken_gt: String
+
+  """All values greater than or equal the given value."""
+  accessToken_gte: String
+
+  """All values containing the given string."""
+  accessToken_contains: String
+
+  """All values not containing the given string."""
+  accessToken_not_contains: String
+
+  """All values starting with the given string."""
+  accessToken_starts_with: String
+
+  """All values not starting with the given string."""
+  accessToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  accessToken_ends_with: String
+
+  """All values not ending with the given string."""
+  accessToken_not_ends_with: String
+  user: UserWhereInput
+}
+
+input TokenWhereUniqueInput {
+  id: ID
 }
 
 type User implements Node {
@@ -789,7 +1046,7 @@ type User implements Node {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: [String!]
+  tokens(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Token!]
   profile(where: ProfileWhereInput): Profile!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
 }
@@ -811,7 +1068,7 @@ input UserCreateInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserCreatetokensInput
+  tokens: TokenCreateManyWithoutUserInput
   profile: ProfileCreateOneWithoutUserInput!
   posts: PostCreateManyWithoutAuthorInput
 }
@@ -826,8 +1083,9 @@ input UserCreateOneWithoutProfileInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreatetokensInput {
-  set: [String!]
+input UserCreateOneWithoutTokensInput {
+  create: UserCreateWithoutTokensInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateWithoutPostsInput {
@@ -837,7 +1095,7 @@ input UserCreateWithoutPostsInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserCreatetokensInput
+  tokens: TokenCreateManyWithoutUserInput
   profile: ProfileCreateOneWithoutUserInput!
 }
 
@@ -848,7 +1106,18 @@ input UserCreateWithoutProfileInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserCreatetokensInput
+  tokens: TokenCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutAuthorInput
+}
+
+input UserCreateWithoutTokensInput {
+  email: String!
+  password: String!
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  profile: ProfileCreateOneWithoutUserInput!
   posts: PostCreateManyWithoutAuthorInput
 }
 
@@ -890,7 +1159,6 @@ type UserPreviousValues {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: [String!]
 }
 
 type UserSubscriptionPayload {
@@ -939,7 +1207,7 @@ input UserUpdateInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserUpdatetokensInput
+  tokens: TokenUpdateManyWithoutUserInput
   profile: ProfileUpdateOneWithoutUserInput
   posts: PostUpdateManyWithoutAuthorInput
 }
@@ -960,8 +1228,12 @@ input UserUpdateOneWithoutProfileInput {
   upsert: UserUpsertWithoutProfileInput
 }
 
-input UserUpdatetokensInput {
-  set: [String!]
+input UserUpdateOneWithoutTokensInput {
+  create: UserCreateWithoutTokensInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutTokensDataInput
+  upsert: UserUpsertWithoutTokensInput
 }
 
 input UserUpdateWithoutPostsDataInput {
@@ -971,7 +1243,7 @@ input UserUpdateWithoutPostsDataInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserUpdatetokensInput
+  tokens: TokenUpdateManyWithoutUserInput
   profile: ProfileUpdateOneWithoutUserInput
 }
 
@@ -982,7 +1254,18 @@ input UserUpdateWithoutProfileDataInput {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: UserUpdatetokensInput
+  tokens: TokenUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateWithoutTokensDataInput {
+  email: String
+  password: String
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  profile: ProfileUpdateOneWithoutUserInput
   posts: PostUpdateManyWithoutAuthorInput
 }
 
@@ -994,6 +1277,11 @@ input UserUpsertWithoutPostsInput {
 input UserUpsertWithoutProfileInput {
   update: UserUpdateWithoutProfileDataInput!
   create: UserCreateWithoutProfileInput!
+}
+
+input UserUpsertWithoutTokensInput {
+  update: UserUpdateWithoutTokensDataInput!
+  create: UserCreateWithoutTokensInput!
 }
 
 input UserWhereInput {
@@ -1267,6 +1555,9 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   google_not_ends_with: String
+  tokens_every: TokenWhereInput
+  tokens_some: TokenWhereInput
+  tokens_none: TokenWhereInput
   profile: ProfileWhereInput
   posts_every: PostWhereInput
   posts_some: PostWhereInput
@@ -1276,4 +1567,6 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+  facebook: String
+  google: String
 }
