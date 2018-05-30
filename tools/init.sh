@@ -18,6 +18,7 @@ ci_env_file=$(pwd)/envs/ci.env
 build_env_file=$(pwd)/envs/build.env
 share_env_file=$(pwd)/envs/share.env
 graph_env_file=$(pwd)/envs/graph.env
+api_env_file=$(pwd)/envs/api.env
 web_env_file=$(pwd)/envs/web.env
 app_env_file=$(pwd)/envs/app.env
 
@@ -47,6 +48,13 @@ if [ -f $graph_env_file ]; then
 else
   cp ./envs/graph.env.sample $graph_env_file;
   echo "Copied file: "$graph_env_file;
+fi;
+
+if [ -f $api_env_file ]; then
+  echo "$api_env_file file already existed, skip copy!";
+else
+  cp ./envs/api.env.sample $api_env_file;
+  echo "Copied file: "$api_env_file;
 fi;
 
 if [ -f $web_env_file ]; then

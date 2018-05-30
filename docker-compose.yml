@@ -80,6 +80,22 @@ services:
     env_file:
       - ./envs/share.env
       - ./envs/graph.env
+  server_api:
+    build:
+      context: server/api
+      args:
+        - NODE_ENV
+    ports:
+      - 4002:4002
+    volumes:
+      - yarn:/home/node/.cache/yarn
+      - ./server/api:/api
+      - ./server/api/package.json:/api/package.json
+      - ./server/api/yarn.lock:/api/yarn.lock
+      - ./tools/yarn.js:/api/yarn.js
+    env_file:
+      - ./envs/share.env
+      - ./envs/api.env
 volumes:
   mysql:
   yarn:

@@ -1,4 +1,5 @@
 # import Post from "./generated/prisma.graphql"
+# import Profile from "./generated/prisma.graphql"
 
 type Query {
   feed: [Post!]!
@@ -20,9 +21,24 @@ type AuthPayload {
   user: User!
 }
 
+type Profile {
+  id: ID!
+  name: String
+  gender: String
+  location: String
+  picture: String
+  user: User!
+}
+
 type User {
   id: ID!
   email: String!
-  name: String!
+  password: String!
+  passwordResetToken: String
+  passwordResetExpires: DateTime
+  facebook: String
+  google: String
+  tokens: [String!]
+  profile: Profile!
   posts: [Post!]!
 }
