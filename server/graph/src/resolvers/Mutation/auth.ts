@@ -2,6 +2,23 @@ import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
 import {Context} from '../../utils'
 
+//#region Interfaces
+interface IDefaultPwdParams {
+  email: string
+  salt: string
+}
+//#endregion
+
+//#region Functions
+const getDefaultPwd = ({email, salt}: IDefaultPwdParams) => {
+  return `${email}+${salt}`
+}
+const generateToken = ({user}) => {
+  return jwt.sign({userId: user.id}, process.env.APP_SECRET)
+}
+const getAuthData = ({user}) => ({token: generateToken({user}), user})
+//#endregion
+
 export const auth = {
   async signup(parent, args, ctx: Context, info) {
     const {email, name} = args
@@ -10,10 +27,7 @@ export const auth = {
       data: {email, password, profile: {create: {name}}},
     })
 
-    return {
-      token: jwt.sign({userId: user.id}, process.env.APP_SECRET),
-      user,
-    }
+    return getAuthData({user})
   },
 
   async login(parent, {email, password}, ctx: Context, info) {
@@ -27,21 +41,29 @@ export const auth = {
       throw new Error('Invalid password')
     }
 
-    return {
-      token: jwt.sign({userId: user.id}, process.env.APP_SECRET),
-      user,
-    }
+    return getAuthData({user})
   },
 
-  async authFacebook(parent, {facebook, email, name, picture}, ctx: Context, info) {
-    const initPassword = email + facebook
-    const password = await bcrypt.hash(initPassword, 10)
-    const user = await ctx.db.mutation.createUser({
-      data: {facebook, email, profile: {create: {name, picture}}, password},
-    })
-    return {
-      token: jwt.sign({userId: user.id}, process.env.APP_SECRET),
-      user,
+  async authFacebook(parent, {facebook, email, name, picture, accessToken}, ctx: Context, info) {
+    // Check if a user with this facebook id already existed
+    const existedFBUser = await ctx.db.query.user({where: {facebook}})
+    if (existedFBUser) {
+      return getAuthData({user: existedFBUser})
+    } else {
+      // Link with local account
+      const existedLocalUser = await ctx.db.query.user({where: {email}})
+      if (existedLocalUser) {
+        const updatedUser = await ctx.db.mutation.updateUser({where: {email}, data: {facebook}})
+        return getAuthData({user: existedLocalUser})
+      } else {
+        // Create new account
+        const initPassword = email + facebook
+        const password = await bcrypt.hash(initPassword, 10)
+        const user = await ctx.db.mutation.createUser({
+          data: {facebook, email, profile: {create: {name, picture}}, password},
+        })
+        return getAuthData({user})
+      }
     }
   },
 }
