@@ -1,9 +1,9 @@
 import {GraphQLClient} from 'graphql-request'
 import {map, find} from 'lodash'
-import {mutationLogin, mutationSignup} from './authql'
+import {mutationLogin, mutationSignup, mutationFacebookAuth} from './authql'
 
 //TODO move this to separated plugin file.
-const mutations = {login: mutationLogin, signup: mutationSignup}
+const mutations = {login: mutationLogin, signup: mutationSignup, authFacebook: mutationFacebookAuth}
 const queries = {}
 
 //#region Interfaces

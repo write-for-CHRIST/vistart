@@ -1,5 +1,5 @@
 //#region Library Import
-import express from 'express'
+import express, {Request, Response} from 'express'
 import passport from 'passport'
 import compression from 'compression'
 import bodyParser from 'body-parser'
@@ -29,8 +29,19 @@ app.use(passport.session())
 //#endregion
 
 //#region Express Routes
-app.post('/auth/local', authentication.login)
 userFeatures.init()
+app.get('/login', (req, res) => {
+  res.redirect('localhost:3000/login')
+})
+app.post('/auth/local', authentication.login)
+app.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email', 'public_profile']}))
+app.get(
+  '/auth/facebook/callback',
+  passport.authenticate('facebook', {failureRedirect: '/login'}),
+  (req: Request, res: Response) => {
+    res.redirect('/login')
+  },
+)
 //#endregion
 
 export default app
