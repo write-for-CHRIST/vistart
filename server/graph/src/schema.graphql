@@ -11,7 +11,13 @@ type Query {
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  authFacebook(email: String!, facebook: String!, name: String!, picture: String!): AuthPayload!
+  authFacebook(
+    email: String!
+    facebook: String!
+    name: String!
+    picture: String!
+    accessToken: String!
+  ): AuthPayload!
   createDraft(title: String!, text: String!): Post!
   publish(id: ID!): Post!
   deletePost(id: ID!): Post!
@@ -31,6 +37,12 @@ type Profile {
   user: User!
 }
 
+type Token {
+  id: ID!
+  kind: String!
+  accessToken: String!
+}
+
 type User {
   id: ID!
   email: String!
@@ -39,7 +51,7 @@ type User {
   passwordResetExpires: DateTime
   facebook: String
   google: String
-  tokens: [String!]
+  tokens: [Token!]!
   profile: Profile!
   posts: [Post!]!
 }
