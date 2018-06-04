@@ -30,8 +30,11 @@ app.use(passport.session())
 
 //#region Express Routes
 userFeatures.init()
+app.get('/', (req, res) => {
+  res.send(`API works!`)
+})
 app.get('/login', (req, res) => {
-  res.redirect('localhost:3000/login')
+  res.redirect('http://localhost:3000')
 })
 app.post('/auth/local', authentication.login)
 app.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email', 'public_profile']}))
@@ -39,6 +42,7 @@ app.get(
   '/auth/facebook/callback',
   passport.authenticate('facebook', {failureRedirect: '/login'}),
   (req: Request, res: Response) => {
+    console.log(req)
     res.redirect('/login')
   },
 )
