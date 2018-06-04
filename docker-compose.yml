@@ -3,14 +3,12 @@ version: '3'
 services:
   mysql:
     image: mysql:5.7
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: prisma
     volumes:
       - mysql:/var/lib/mysql
   prisma:
     image: prismagraphql/prisma:1.8
-    restart: always
     ports:
       - 4466:4466
     environment:
