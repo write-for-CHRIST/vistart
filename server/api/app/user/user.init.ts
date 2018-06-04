@@ -16,10 +16,13 @@ const combineName = ({last, first, middle}: any) => {
 
 const initLocal = () => {
   passport.serializeUser<User, any>((user, done) => {
+    console.log('serializeUser', user.profile)
     done(undefined, user.id)
   })
 
-  passport.deserializeUser<User, any>((id, done) => {})
+  passport.deserializeUser<User, any>((id, done) => {
+    console.log('deserializeUser', id)
+  })
 
   passport.use(
     new LocalStrategy({usernameField: 'email'}, async (email, password, done) => {

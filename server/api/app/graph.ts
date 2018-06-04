@@ -22,8 +22,7 @@ interface IFacebookLoginPayload {
 
 //#region Functions
 export const onAuthenticated = (authData: any) => {
-  console.log('set header', authData)
-  setHeader('Authorization', `Bearer ${authData.login.token}`)
+  setHeader('Authorization', `Bearer ${authData.token}`)
 }
 //#endregion
 
@@ -37,6 +36,6 @@ export const loginLocal = async ({email, password}: ILocalLoginPayload) => {
 export const authFacebook = async (payload: IFacebookLoginPayload) => {
   const result = await mutate({operator: 'authFacebook', variables: payload})
   onAuthenticated(result)
-  return result
+  return result.authFacebook.user
 }
 //#endregion
