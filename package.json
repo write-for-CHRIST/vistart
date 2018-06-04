@@ -8,8 +8,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "chmod": "chmod +x ./tools/*.sh",
-    "preinstall": "yarn chmod && ./tools/init.sh",
+    "setup": "node ./tools/setup.js",
+    "postinstall": "yarn setup",
     "build": "nodenv -E ./envs/build.env -e 'docker-compose build'",
     "build:nocache": "nodenv -E ./envs/build.env -e 'docker-compose build --no-cache'",
     "build:ci": "nodenv -E ./envs/ci.env -e 'docker-compose build'",
@@ -51,5 +51,10 @@
   "devDependencies": {
     "node-env-run": "^3.0.2",
     "npm-run-all": "^4.1.3"
+  },
+  "dependencies": {
+    "hasbin": "^1.2.3",
+    "lodash": "^4.17.10",
+    "ora": "^2.1.0"
   }
 }
