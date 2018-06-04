@@ -56,7 +56,6 @@ services:
       - yarn:/home/node/.cache/yarn
       - ./client/app:/app
       - ./client/app/package.json:/app/package.json
-      - ./client/app/package-lock.json:/app/package-lock.json
       - ./tools/npm.js:/app/npm.js
     env_file:
       - ./envs/share.env

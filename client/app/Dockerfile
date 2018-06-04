@@ -13,11 +13,11 @@ WORKDIR /app
 
 USER root
 
-COPY package.json package-lock.json ./
-
 # Install expo & do login
-RUN npm install -g exp@54.0.0
+RUN npm install -g exp
 RUN npm config set '@bit:registry' https://node.bitsrc.io
+
+COPY package.json ./
 
 RUN set -ex; \
     if [ "$NODE_ENV" = "production" ]; then \
@@ -25,13 +25,13 @@ RUN set -ex; \
         npm install; \
     elif [ "$NODE_ENV" = "test" ]; then \
         echo "Build for test image"; \
-        chown -R root:root node_modules package.json package-lock.json; \
+        chown -R root:root node_modules package.json; \
         npm install; \
     else \
         echo "Build for development image"; \
         exp login --username $EXPO_USERNAME --password $EXPO_PASSWORD; \
         mkdir -p -m 777 build node_modules; \
-        chown -R root:root node_modules package.json package-lock.json; \
+        chown -R root:root node_modules package.json; \
     fi;
 
 COPY . .
