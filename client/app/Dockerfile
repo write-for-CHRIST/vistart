@@ -17,20 +17,21 @@ USER root
 RUN npm install -g exp
 RUN npm config set '@bit:registry' https://node.bitsrc.io
 
-COPY package.json ./
+COPY package.json yarn.lock ./
 
 RUN set -ex; \
     if [ "$NODE_ENV" = "production" ]; then \
         echo "Build for production image"; \
-        npm install; \
+        yarn install --no-cache --frozen-lockfile --production; \
     elif [ "$NODE_ENV" = "test" ]; then \
         echo "Build for test image"; \
-        chown -R root:root node_modules package.json; \
-        npm install; \
+        touch yarn-error.log; \
+        yarn install --no-cache --frozen-lockfile; \
+        chown -R root:root node_modules package.json yarn.lock yarn-error.log; \
     else \
         echo "Build for development image"; \
         exp login --username $EXPO_USERNAME --password $EXPO_PASSWORD; \
-        mkdir -p -m 777 build node_modules; \
+        mkdir -p -m 777 build node_modules /home/node/.cache/yarn; \
         chown -R root:root node_modules package.json; \
     fi;
 
@@ -42,4 +43,4 @@ EXPOSE 19001
 EXPOSE 4040
 EXPOSE 80
 
-CMD ["node", "npm.js"]
+CMD ["node", "yarn.js"]

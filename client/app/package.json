@@ -2,7 +2,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "scripts": {
-    "start": "exp start --host $EXPO_HOST",
+    "start": "yarn start:dev",
+    "start:dev": "exp start --host $EXPO_HOST",
     "test": "node ./node_modules/jest/bin/jest.js",
     "test:watch": "npm run test --watchAll"
   },
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "enzyme": "^3.3.0",
+    "jest": "^23.1.0",
     "jest-expo": "^27.0.1",
     "react-test-renderer": "^16.4.0"
   },
