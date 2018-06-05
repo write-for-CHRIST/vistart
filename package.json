@@ -15,6 +15,7 @@
     "build:ci": "nodenv -E ./envs/ci.env -e 'docker-compose build'",
     "start": "docker-compose up",
     "down": "docker-compose down",
+    "gen": "node ./tools/generator.js",
     "test": "run-p test:graph test:web test:app",
     "test:ci": "run-p testci:graph testci:web testci:app",
     "exec:graph": "docker-compose exec server_graph",
@@ -53,8 +54,11 @@
     "npm-run-all": "^4.1.3"
   },
   "dependencies": {
+    "commander": "^2.15.1",
     "hasbin": "^1.2.3",
     "lodash": "^4.17.10",
-    "ora": "^2.1.0"
+    "ncp": "^2.0.0",
+    "ora": "^2.1.0",
+    "read-pkg": "^3.0.0"
   }
 }
