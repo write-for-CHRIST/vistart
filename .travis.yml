@@ -10,7 +10,7 @@ cache: yarn
 
 install:
   - yarn
-  - yarn build:ci
+  - yarn pj:build:ci
 
 script:
   - yarn test:ci
