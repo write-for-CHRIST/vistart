@@ -3,8 +3,10 @@ const {copyFile} = require('fs')
 const {join} = require('path')
 const ora = require('ora')
 const program = require('commander')
-const {indexOf} = require('lodash')
+const {toPairs, sortBy, fromPairs, map, indexOf} = require('lodash')
 const {ncp} = require('ncp')
+const readPkg = require('read-pkg')
+const writePkg = require('write-pkg')
 
 // Constants
 const PREDEFINED_MODULE = ['server', 'client', 'lib']
@@ -40,7 +42,44 @@ const copyTemplate = async ({templateName, serviceName, moduleName}) => {
   spinner.succeed(`Copied template ${templateName} to ${dest}...`)
 }
 
-const batchPackageJson = async ({}) => {}
+//#region Package.json Scripts
+const scriptPackageAdd = ({moduleName, serviceName}) => ({
+  [`add:${serviceName}`]: `docker-compose run --rm --no-deps ${moduleName}_${serviceName} yarn add`,
+})
+const scriptPackageRemove = ({moduleName, serviceName}) => ({
+  [`remove:${serviceName}`]: `docker-compose run --rm --no-deps ${moduleName}_${serviceName} yarn remove`,
+})
+const scriptPackageTest = ({moduleName, serviceName}) => ({
+  [`test:${serviceName}`]: `docker-compose run ${moduleName}_${serviceName} yarn && cd ${moduleName}/${serviceName} && yarn test`,
+})
+const scriptDockerExec = ({moduleName, serviceName}) => ({
+  [`exec:${serviceName}`]: `docker-compose exec ${moduleName}_${serviceName}`,
+})
+const scriptDockerEnter = ({moduleName, serviceName}) => ({
+  [`enter:${serviceName}`]: `yarn exec:${serviceName} /bin/sh`,
+})
+const scriptDockerRestart = ({moduleName, serviceName}) => ({
+  [`restart:${serviceName}`]: `docker-compose restart ${moduleName}_${serviceName}`,
+})
+
+const buildScript = p => ({
+  ...scriptPackageAdd(p),
+  ...scriptPackageRemove(p),
+  ...scriptPackageTest(p),
+  ...scriptDockerExec(p),
+  ...scriptDockerEnter(p),
+  ...scriptDockerRestart(p),
+})
+
+const sortScripts = ({scripts}) => fromPairs(sortBy(toPairs(scripts)))
+
+const batchPackageJson = async ({moduleName, serviceName}) => {
+  const pkg = await readPkg()
+  pkg.scripts = sortScripts({scripts: {...pkg.scripts, ...buildScript({moduleName, serviceName})}})
+  await writePkg(pkg)
+  spinner.succeed(`Added ${serviceName} scripts to package.json`)
+}
+//#endregion
 
 const batchDockerCompose = async ({}) => {}
 
@@ -48,6 +87,7 @@ const generate = async () => {
   program
     .version('0.1.0')
     .arguments('<service_name> <main_module> <template_name>')
+    .option('-d, --debug', 'Debugging (Not execute)')
     .action((service_name, main_module, template_name) => {
       serviceName = service_name
       moduleName = main_module
@@ -65,8 +105,11 @@ const generate = async () => {
     spinner.fail('No template name provided, please check .templates directory!')
     process.exit(1)
   } else {
-    await copyTemplate({templateName, serviceName, moduleName})
-    spinner.succeed(`Generated ${serviceName} in ${moduleName}`)
+    await batchPackageJson({serviceName, moduleName})
+    if (!program.debug) {
+      await copyTemplate({templateName, serviceName, moduleName})
+      spinner.succeed(`Generated ${serviceName} in ${moduleName}`)
+    }
   }
 }
 
@@ -74,4 +117,7 @@ generate()
   .then(() => {
     spinner.stop()
   })
-  .catch(err => spinner.fail(err.message))
+  .catch(err => {
+    console.error(err)
+    spinner.fail(err)
+  })
