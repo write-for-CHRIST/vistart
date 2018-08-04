@@ -1,8 +1,88 @@
-import { Prisma as BasePrisma, BasePrismaOptions } from 'prisma-binding'
-import { GraphQLResolveInfo } from 'graphql'
+import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
+import { IResolvers } from 'graphql-tools/dist/Interfaces'
+import { Options } from 'graphql-binding'
+import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'
 
-export const typeDefs = `
-type AggregatePost {
+export interface Query {
+    posts: <T = Post[]>(args: { where?: PostWhereInput, orderBy?: PostOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    profiles: <T = Profile[]>(args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    tokens: <T = Token[]>(args: { where?: TokenWhereInput, orderBy?: TokenOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    users: <T = User[]>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    post: <T = Post | null>(args: { where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    profile: <T = Profile | null>(args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    token: <T = Token | null>(args: { where: TokenWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    postsConnection: <T = PostConnection>(args: { where?: PostWhereInput, orderBy?: PostOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    profilesConnection: <T = ProfileConnection>(args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    tokensConnection: <T = TokenConnection>(args: { where?: TokenWhereInput, orderBy?: TokenOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    usersConnection: <T = UserConnection>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+  }
+
+export interface Mutation {
+    createPost: <T = Post>(args: { data: PostCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createProfile: <T = Profile>(args: { data: ProfileCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createToken: <T = Token>(args: { data: TokenCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createUser: <T = User>(args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updatePost: <T = Post | null>(args: { data: PostUpdateInput, where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateProfile: <T = Profile | null>(args: { data: ProfileUpdateInput, where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateToken: <T = Token | null>(args: { data: TokenUpdateInput, where: TokenWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deletePost: <T = Post | null>(args: { where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteProfile: <T = Profile | null>(args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteToken: <T = Token | null>(args: { where: TokenWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertPost: <T = Post>(args: { where: PostWhereUniqueInput, create: PostCreateInput, update: PostUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertProfile: <T = Profile>(args: { where: ProfileWhereUniqueInput, create: ProfileCreateInput, update: ProfileUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertToken: <T = Token>(args: { where: TokenWhereUniqueInput, create: TokenCreateInput, update: TokenUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyPosts: <T = BatchPayload>(args: { data: PostUpdateInput, where?: PostWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyProfiles: <T = BatchPayload>(args: { data: ProfileUpdateInput, where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyTokens: <T = BatchPayload>(args: { data: TokenUpdateInput, where?: TokenWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyPosts: <T = BatchPayload>(args: { where?: PostWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyProfiles: <T = BatchPayload>(args: { where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyTokens: <T = BatchPayload>(args: { where?: TokenWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+  }
+
+export interface Subscription {
+    post: <T = PostSubscriptionPayload | null>(args: { where?: PostSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    profile: <T = ProfileSubscriptionPayload | null>(args: { where?: ProfileSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    token: <T = TokenSubscriptionPayload | null>(args: { where?: TokenSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    user: <T = UserSubscriptionPayload | null>(args: { where?: UserSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
+  }
+
+export interface Exists {
+  Post: (where?: PostWhereInput) => Promise<boolean>
+  Profile: (where?: ProfileWhereInput) => Promise<boolean>
+  Token: (where?: TokenWhereInput) => Promise<boolean>
+  User: (where?: UserWhereInput) => Promise<boolean>
+}
+
+export interface Prisma {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+  exists: Exists
+  request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
+  delegate(operation: 'query' | 'mutation', fieldName: string, args: {
+    [key: string]: any;
+}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<any>;
+delegateSubscription(fieldName: string, args?: {
+    [key: string]: any;
+}, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<AsyncIterator<any>>;
+getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
+}
+
+export interface BindingConstructor<T> {
+  new(options: BasePrismaOptions): T
+}
+/**
+ * Type Defs
+*/
+
+const typeDefs = `type AggregatePost {
   count: Int!
 }
 
@@ -25,19 +105,44 @@ enum AuthProvider {
 }
 
 type BatchPayload {
-  """
-  The number of nodes that have been affected by the Batch operation.
-  """
+  """The number of nodes that have been affected by the Batch operation."""
   count: Long!
 }
 
 scalar DateTime
 
 """
-The 'Long' scalar type represents non-fractional signed whole numeric values.
+The \`Long\` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 """
 scalar Long
+
+type Mutation {
+  createPost(data: PostCreateInput!): Post!
+  createProfile(data: ProfileCreateInput!): Profile!
+  createToken(data: TokenCreateInput!): Token!
+  createUser(data: UserCreateInput!): User!
+  updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
+  updateProfile(data: ProfileUpdateInput!, where: ProfileWhereUniqueInput!): Profile
+  updateToken(data: TokenUpdateInput!, where: TokenWhereUniqueInput!): Token
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  deletePost(where: PostWhereUniqueInput!): Post
+  deleteProfile(where: ProfileWhereUniqueInput!): Profile
+  deleteToken(where: TokenWhereUniqueInput!): Token
+  deleteUser(where: UserWhereUniqueInput!): User
+  upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
+  upsertProfile(where: ProfileWhereUniqueInput!, create: ProfileCreateInput!, update: ProfileUpdateInput!): Profile!
+  upsertToken(where: TokenWhereUniqueInput!, create: TokenCreateInput!, update: TokenUpdateInput!): Token!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
+  updateManyProfiles(data: ProfileUpdateInput!, where: ProfileWhereInput): BatchPayload!
+  updateManyTokens(data: TokenUpdateInput!, where: TokenWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  deleteManyPosts(where: PostWhereInput): BatchPayload!
+  deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
+  deleteManyTokens(where: TokenWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+}
 
 enum MutationType {
   CREATED
@@ -45,35 +150,24 @@ enum MutationType {
   DELETED
 }
 
-"""
-An object with an ID
-"""
+"""An object with an ID"""
 interface Node {
-  """
-  The id of the object.
-  """
+  """The id of the object."""
   id: ID!
 }
 
-"""
-Information about pagination in a connection.
-"""
+"""Information about pagination in a connection."""
 type PageInfo {
-  """
-  When paginating forwards, are there more items?
-  """
+  """When paginating forwards, are there more items?"""
   hasNextPage: Boolean!
-  """
-  When paginating backwards, are there more items?
-  """
+
+  """When paginating backwards, are there more items?"""
   hasPreviousPage: Boolean!
-  """
-  When paginating backwards, the cursor to continue.
-  """
+
+  """When paginating backwards, the cursor to continue."""
   startCursor: String
-  """
-  When paginating forwards, the cursor to continue.
-  """
+
+  """When paginating forwards, the cursor to continue."""
   endCursor: String
 }
 
@@ -87,17 +181,12 @@ type Post implements Node {
   author(where: UserWhereInput): User!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type PostConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [PostEdge]!
   aggregate: AggregatePost!
 }
@@ -120,17 +209,12 @@ input PostCreateWithoutAuthorInput {
   text: String!
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type PostEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: Post!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -166,30 +250,30 @@ type PostSubscriptionPayload {
 }
 
 input PostSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [PostSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [PostSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [PostSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -231,239 +315,181 @@ input PostUpsertWithWhereUniqueWithoutAuthorInput {
 }
 
 input PostWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [PostWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [PostWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [PostWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   createdAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   createdAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   createdAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   createdAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   createdAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   createdAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   createdAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   createdAt_gte: DateTime
   updatedAt: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   updatedAt_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   updatedAt_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   updatedAt_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   updatedAt_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   updatedAt_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   updatedAt_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
   isPublished: Boolean
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   isPublished_not: Boolean
   title: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   title_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   title_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   title_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   title_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   title_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   title_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   title_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   title_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   title_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   title_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   title_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   title_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   title_not_ends_with: String
   text: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   text_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   text_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   text_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   text_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   text_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   text_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   text_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   text_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   text_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   text_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   text_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   text_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   text_not_ends_with: String
   author: UserWhereInput
 }
@@ -481,17 +507,12 @@ type Profile implements Node {
   user(where: UserWhereInput): User!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type ProfileConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [ProfileEdge]!
   aggregate: AggregateProfile!
 }
@@ -516,17 +537,12 @@ input ProfileCreateWithoutUserInput {
   picture: String
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type ProfileEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: Profile!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -563,30 +579,30 @@ type ProfileSubscriptionPayload {
 }
 
 input ProfileSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [ProfileSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [ProfileSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [ProfileSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -623,288 +639,247 @@ input ProfileUpsertWithoutUserInput {
 }
 
 input ProfileWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [ProfileWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [ProfileWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [ProfileWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   name: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   name_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   name_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   name_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   name_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   name_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   name_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   name_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   name_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   name_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   name_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   name_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   name_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   name_not_ends_with: String
   gender: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   gender_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   gender_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   gender_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   gender_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   gender_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   gender_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   gender_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   gender_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   gender_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   gender_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   gender_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   gender_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   gender_not_ends_with: String
   location: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   location_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   location_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   location_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   location_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   location_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   location_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   location_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   location_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   location_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   location_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   location_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   location_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   location_not_ends_with: String
   picture: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   picture_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   picture_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   picture_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   picture_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   picture_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   picture_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   picture_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   picture_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   picture_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   picture_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   picture_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   picture_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   picture_not_ends_with: String
   user: UserWhereInput
 }
 
 input ProfileWhereUniqueInput {
   id: ID
+}
+
+type Query {
+  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
+  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile]!
+  tokens(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Token]!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  post(where: PostWhereUniqueInput!): Post
+  profile(where: ProfileWhereUniqueInput!): Profile
+  token(where: TokenWhereUniqueInput!): Token
+  user(where: UserWhereUniqueInput!): User
+  postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  profilesConnection(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileConnection!
+  tokensConnection(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TokenConnection!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+type Subscription {
+  post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
+  token(where: TokenSubscriptionWhereInput): TokenSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type Token implements Node {
@@ -914,17 +889,12 @@ type Token implements Node {
   user(where: UserWhereInput): User!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type TokenConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [TokenEdge]!
   aggregate: AggregateToken!
 }
@@ -945,17 +915,12 @@ input TokenCreateWithoutUserInput {
   accessToken: String!
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type TokenEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: Token!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -986,30 +951,30 @@ type TokenSubscriptionPayload {
 }
 
 input TokenSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [TokenSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [TokenSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [TokenSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -1049,136 +1014,103 @@ input TokenUpsertWithWhereUniqueWithoutUserInput {
 }
 
 input TokenWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [TokenWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [TokenWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [TokenWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   kind: AuthProvider
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   kind_not: AuthProvider
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   kind_in: [AuthProvider!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   kind_not_in: [AuthProvider!]
   accessToken: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   accessToken_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   accessToken_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   accessToken_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   accessToken_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   accessToken_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   accessToken_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   accessToken_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   accessToken_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   accessToken_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   accessToken_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   accessToken_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   accessToken_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   accessToken_not_ends_with: String
   user: UserWhereInput
 }
@@ -1200,17 +1132,12 @@ type User implements Node {
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type UserConnection {
-  """
-  Information to aid in pagination.
-  """
+  """Information to aid in pagination."""
   pageInfo: PageInfo!
-  """
-  A list of edges.
-  """
+
+  """A list of edges."""
   edges: [UserEdge]!
   aggregate: AggregateUser!
 }
@@ -1275,17 +1202,12 @@ input UserCreateWithoutTokensInput {
   posts: PostCreateManyWithoutAuthorInput
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type UserEdge {
-  """
-  The item at the end of the edge.
-  """
+  """The item at the end of the edge."""
   node: User!
-  """
-  A cursor for use in pagination.
-  """
+
+  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -1328,30 +1250,30 @@ type UserSubscriptionPayload {
 }
 
 input UserSubscriptionWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [UserSubscriptionWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [UserSubscriptionWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [UserSubscriptionWhereInput!]
+
   """
   The subscription event gets dispatched when it's listed in mutation_in
   """
   mutation_in: [MutationType!]
+
   """
   The subscription event gets only dispatched when one of the updated fields names is included in this list
   """
   updatedFields_contains: String
+
   """
   The subscription event gets only dispatched when all of the field names included in this list have been updated
   """
   updatedFields_contains_every: [String!]
+
   """
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
@@ -1444,364 +1366,275 @@ input UserUpsertWithoutTokensInput {
 }
 
 input UserWhereInput {
-  """
-  Logical AND on all given filters.
-  """
+  """Logical AND on all given filters."""
   AND: [UserWhereInput!]
-  """
-  Logical OR on all given filters.
-  """
+
+  """Logical OR on all given filters."""
   OR: [UserWhereInput!]
-  """
-  Logical NOT on all given filters combined by AND.
-  """
+
+  """Logical NOT on all given filters combined by AND."""
   NOT: [UserWhereInput!]
   id: ID
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   id_not: ID
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   id_in: [ID!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   id_not_in: [ID!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   id_lt: ID
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   id_lte: ID
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   id_gt: ID
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   id_gte: ID
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   id_contains: ID
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   id_not_contains: ID
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   id_starts_with: ID
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   id_not_starts_with: ID
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   id_ends_with: ID
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   id_not_ends_with: ID
   email: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   email_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   email_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   email_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   email_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   email_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   email_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   email_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   email_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   email_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   email_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   email_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   email_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   email_not_ends_with: String
   password: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   password_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   password_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   password_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   password_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   password_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   password_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   password_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   password_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   password_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   password_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   password_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   password_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   password_not_ends_with: String
   passwordResetToken: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   passwordResetToken_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   passwordResetToken_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   passwordResetToken_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   passwordResetToken_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   passwordResetToken_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   passwordResetToken_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   passwordResetToken_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   passwordResetToken_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   passwordResetToken_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   passwordResetToken_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   passwordResetToken_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   passwordResetToken_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   passwordResetToken_not_ends_with: String
   passwordResetExpires: DateTime
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   passwordResetExpires_not: DateTime
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   passwordResetExpires_in: [DateTime!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   passwordResetExpires_not_in: [DateTime!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   passwordResetExpires_lt: DateTime
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   passwordResetExpires_lte: DateTime
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   passwordResetExpires_gt: DateTime
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   passwordResetExpires_gte: DateTime
   facebook: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   facebook_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   facebook_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   facebook_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   facebook_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   facebook_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   facebook_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   facebook_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   facebook_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   facebook_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   facebook_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   facebook_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   facebook_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   facebook_not_ends_with: String
   google: String
-  """
-  All values that are not equal to given value.
-  """
+
+  """All values that are not equal to given value."""
   google_not: String
-  """
-  All values that are contained in given list.
-  """
+
+  """All values that are contained in given list."""
   google_in: [String!]
-  """
-  All values that are not contained in given list.
-  """
+
+  """All values that are not contained in given list."""
   google_not_in: [String!]
-  """
-  All values less than the given value.
-  """
+
+  """All values less than the given value."""
   google_lt: String
-  """
-  All values less than or equal the given value.
-  """
+
+  """All values less than or equal the given value."""
   google_lte: String
-  """
-  All values greater than the given value.
-  """
+
+  """All values greater than the given value."""
   google_gt: String
-  """
-  All values greater than or equal the given value.
-  """
+
+  """All values greater than or equal the given value."""
   google_gte: String
-  """
-  All values containing the given string.
-  """
+
+  """All values containing the given string."""
   google_contains: String
-  """
-  All values not containing the given string.
-  """
+
+  """All values not containing the given string."""
   google_not_contains: String
-  """
-  All values starting with the given string.
-  """
+
+  """All values starting with the given string."""
   google_starts_with: String
-  """
-  All values not starting with the given string.
-  """
+
+  """All values not starting with the given string."""
   google_not_starts_with: String
-  """
-  All values ending with the given string.
-  """
+
+  """All values ending with the given string."""
   google_ends_with: String
-  """
-  All values not ending with the given string.
-  """
+
+  """All values not ending with the given string."""
   google_not_ends_with: String
   tokens_every: TokenWhereInput
   tokens_some: TokenWhereInput
@@ -1818,71 +1651,19 @@ input UserWhereUniqueInput {
   facebook: String
   google: String
 }
-
-type Mutation {
-  createPost(data: PostCreateInput!): Post!
-  createProfile(data: ProfileCreateInput!): Profile!
-  createToken(data: TokenCreateInput!): Token!
-  createUser(data: UserCreateInput!): User!
-  updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
-  updateProfile(data: ProfileUpdateInput!, where: ProfileWhereUniqueInput!): Profile
-  updateToken(data: TokenUpdateInput!, where: TokenWhereUniqueInput!): Token
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deletePost(where: PostWhereUniqueInput!): Post
-  deleteProfile(where: ProfileWhereUniqueInput!): Profile
-  deleteToken(where: TokenWhereUniqueInput!): Token
-  deleteUser(where: UserWhereUniqueInput!): User
-  upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
-  upsertProfile(where: ProfileWhereUniqueInput!, create: ProfileCreateInput!, update: ProfileUpdateInput!): Profile!
-  upsertToken(where: TokenWhereUniqueInput!, create: TokenCreateInput!, update: TokenUpdateInput!): Token!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
-  updateManyProfiles(data: ProfileUpdateInput!, where: ProfileWhereInput): BatchPayload!
-  updateManyTokens(data: TokenUpdateInput!, where: TokenWhereInput): BatchPayload!
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
-  deleteManyPosts(where: PostWhereInput): BatchPayload!
-  deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
-  deleteManyTokens(where: TokenWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
-}
-
-type Query {
-  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
-  profiles(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Profile]!
-  tokens(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Token]!
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  post(where: PostWhereUniqueInput!): Post
-  profile(where: ProfileWhereUniqueInput!): Profile
-  token(where: TokenWhereUniqueInput!): Token
-  user(where: UserWhereUniqueInput!): User
-  postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
-  profilesConnection(where: ProfileWhereInput, orderBy: ProfileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProfileConnection!
-  tokensConnection(where: TokenWhereInput, orderBy: TokenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TokenConnection!
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  """
-  Fetches an object given its ID
-  """
-  node("""
-  The ID of an object
-  """
-  id: ID!): Node
-}
-
-type Subscription {
-  post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
-  profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
-  token(where: TokenSubscriptionWhereInput): TokenSubscriptionPayload
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-}
 `
 
-export type AuthProvider = 
-  'LOCAL' |
+export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDefs})
+
+/**
+ * Types
+*/
+
+export type AuthProvider =   'LOCAL' |
   'FACEBOOK' |
   'GOOGLE'
 
-export type PostOrderByInput = 
-  'id_ASC' |
+export type PostOrderByInput =   'id_ASC' |
   'id_DESC' |
   'createdAt_ASC' |
   'createdAt_DESC' |
@@ -1895,8 +1676,7 @@ export type PostOrderByInput =
   'text_ASC' |
   'text_DESC'
 
-export type TokenOrderByInput = 
-  'id_ASC' |
+export type TokenOrderByInput =   'id_ASC' |
   'id_DESC' |
   'kind_ASC' |
   'kind_DESC' |
@@ -1907,8 +1687,7 @@ export type TokenOrderByInput =
   'createdAt_ASC' |
   'createdAt_DESC'
 
-export type ProfileOrderByInput = 
-  'id_ASC' |
+export type ProfileOrderByInput =   'id_ASC' |
   'id_DESC' |
   'name_ASC' |
   'name_DESC' |
@@ -1923,8 +1702,7 @@ export type ProfileOrderByInput =
   'createdAt_ASC' |
   'createdAt_DESC'
 
-export type UserOrderByInput = 
-  'id_ASC' |
+export type UserOrderByInput =   'id_ASC' |
   'id_DESC' |
   'email_ASC' |
   'email_DESC' |
@@ -1943,8 +1721,7 @@ export type UserOrderByInput =
   'createdAt_ASC' |
   'createdAt_DESC'
 
-export type MutationType = 
-  'CREATED' |
+export type MutationType =   'CREATED' |
   'UPDATED' |
   'DELETED'
 
@@ -2821,7 +2598,7 @@ export type ID_Input = string | number
 export type ID_Output = string
 
 /*
-The 'Long' scalar type represents non-fractional signed whole numeric values.
+The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 */
 export type Long = string
@@ -2831,124 +2608,4 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 */
 export type String = string
 
-export type DateTime = string
-
-export interface Schema {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
-}
-
-export type Query = {
-  posts: (args: { where?: PostWhereInput, orderBy?: PostOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Post[]>
-  profiles: (args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Profile[]>
-  tokens: (args: { where?: TokenWhereInput, orderBy?: TokenOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<Token[]>
-  users: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<User[]>
-  post: (args: { where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Post | null>
-  profile: (args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Profile | null>
-  token: (args: { where: TokenWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Token | null>
-  user: (args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
-  postsConnection: (args: { where?: PostWhereInput, orderBy?: PostOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<PostConnection>
-  profilesConnection: (args: { where?: ProfileWhereInput, orderBy?: ProfileOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<ProfileConnection>
-  tokensConnection: (args: { where?: TokenWhereInput, orderBy?: TokenOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<TokenConnection>
-  usersConnection: (args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string) => Promise<UserConnection>
-  node: (args: { id: ID_Output }, info?: GraphQLResolveInfo | string) => Promise<Node | null>
-}
-
-export type Mutation = {
-  createPost: (args: { data: PostCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Post>
-  createProfile: (args: { data: ProfileCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Profile>
-  createToken: (args: { data: TokenCreateInput }, info?: GraphQLResolveInfo | string) => Promise<Token>
-  createUser: (args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string) => Promise<User>
-  updatePost: (args: { data: PostUpdateInput, where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Post | null>
-  updateProfile: (args: { data: ProfileUpdateInput, where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Profile | null>
-  updateToken: (args: { data: TokenUpdateInput, where: TokenWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Token | null>
-  updateUser: (args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
-  deletePost: (args: { where: PostWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Post | null>
-  deleteProfile: (args: { where: ProfileWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Profile | null>
-  deleteToken: (args: { where: TokenWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<Token | null>
-  deleteUser: (args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string) => Promise<User | null>
-  upsertPost: (args: { where: PostWhereUniqueInput, create: PostCreateInput, update: PostUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Post>
-  upsertProfile: (args: { where: ProfileWhereUniqueInput, create: ProfileCreateInput, update: ProfileUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Profile>
-  upsertToken: (args: { where: TokenWhereUniqueInput, create: TokenCreateInput, update: TokenUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<Token>
-  upsertUser: (args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string) => Promise<User>
-  updateManyPosts: (args: { data: PostUpdateInput, where?: PostWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManyProfiles: (args: { data: ProfileUpdateInput, where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManyTokens: (args: { data: TokenUpdateInput, where?: TokenWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  updateManyUsers: (args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyPosts: (args: { where?: PostWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyProfiles: (args: { where?: ProfileWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyTokens: (args: { where?: TokenWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-  deleteManyUsers: (args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string) => Promise<BatchPayload>
-}
-
-export type Subscription = {
-  post: (args: { where?: PostSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<PostSubscriptionPayload>>
-  profile: (args: { where?: ProfileSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<ProfileSubscriptionPayload>>
-  token: (args: { where?: TokenSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<TokenSubscriptionPayload>>
-  user: (args: { where?: UserSubscriptionWhereInput }, infoOrQuery?: GraphQLResolveInfo | string) => Promise<AsyncIterator<UserSubscriptionPayload>>
-}
-
-export class Prisma extends BasePrisma {
-  
-  constructor({ endpoint, secret, fragmentReplacements, debug }: BasePrismaOptions) {
-    super({ typeDefs, endpoint, secret, fragmentReplacements, debug });
-  }
-
-  exists = {
-    Post: (where: PostWhereInput): Promise<boolean> => super.existsDelegate('query', 'posts', { where }, {}, '{ id }'),
-    Profile: (where: ProfileWhereInput): Promise<boolean> => super.existsDelegate('query', 'profiles', { where }, {}, '{ id }'),
-    Token: (where: TokenWhereInput): Promise<boolean> => super.existsDelegate('query', 'tokens', { where }, {}, '{ id }'),
-    User: (where: UserWhereInput): Promise<boolean> => super.existsDelegate('query', 'users', { where }, {}, '{ id }')
-  }
-
-  query: Query = {
-    posts: (args, info): Promise<Post[]> => super.delegate('query', 'posts', args, {}, info),
-    profiles: (args, info): Promise<Profile[]> => super.delegate('query', 'profiles', args, {}, info),
-    tokens: (args, info): Promise<Token[]> => super.delegate('query', 'tokens', args, {}, info),
-    users: (args, info): Promise<User[]> => super.delegate('query', 'users', args, {}, info),
-    post: (args, info): Promise<Post | null> => super.delegate('query', 'post', args, {}, info),
-    profile: (args, info): Promise<Profile | null> => super.delegate('query', 'profile', args, {}, info),
-    token: (args, info): Promise<Token | null> => super.delegate('query', 'token', args, {}, info),
-    user: (args, info): Promise<User | null> => super.delegate('query', 'user', args, {}, info),
-    postsConnection: (args, info): Promise<PostConnection> => super.delegate('query', 'postsConnection', args, {}, info),
-    profilesConnection: (args, info): Promise<ProfileConnection> => super.delegate('query', 'profilesConnection', args, {}, info),
-    tokensConnection: (args, info): Promise<TokenConnection> => super.delegate('query', 'tokensConnection', args, {}, info),
-    usersConnection: (args, info): Promise<UserConnection> => super.delegate('query', 'usersConnection', args, {}, info),
-    node: (args, info): Promise<Node | null> => super.delegate('query', 'node', args, {}, info)
-  }
-
-  mutation: Mutation = {
-    createPost: (args, info): Promise<Post> => super.delegate('mutation', 'createPost', args, {}, info),
-    createProfile: (args, info): Promise<Profile> => super.delegate('mutation', 'createProfile', args, {}, info),
-    createToken: (args, info): Promise<Token> => super.delegate('mutation', 'createToken', args, {}, info),
-    createUser: (args, info): Promise<User> => super.delegate('mutation', 'createUser', args, {}, info),
-    updatePost: (args, info): Promise<Post | null> => super.delegate('mutation', 'updatePost', args, {}, info),
-    updateProfile: (args, info): Promise<Profile | null> => super.delegate('mutation', 'updateProfile', args, {}, info),
-    updateToken: (args, info): Promise<Token | null> => super.delegate('mutation', 'updateToken', args, {}, info),
-    updateUser: (args, info): Promise<User | null> => super.delegate('mutation', 'updateUser', args, {}, info),
-    deletePost: (args, info): Promise<Post | null> => super.delegate('mutation', 'deletePost', args, {}, info),
-    deleteProfile: (args, info): Promise<Profile | null> => super.delegate('mutation', 'deleteProfile', args, {}, info),
-    deleteToken: (args, info): Promise<Token | null> => super.delegate('mutation', 'deleteToken', args, {}, info),
-    deleteUser: (args, info): Promise<User | null> => super.delegate('mutation', 'deleteUser', args, {}, info),
-    upsertPost: (args, info): Promise<Post> => super.delegate('mutation', 'upsertPost', args, {}, info),
-    upsertProfile: (args, info): Promise<Profile> => super.delegate('mutation', 'upsertProfile', args, {}, info),
-    upsertToken: (args, info): Promise<Token> => super.delegate('mutation', 'upsertToken', args, {}, info),
-    upsertUser: (args, info): Promise<User> => super.delegate('mutation', 'upsertUser', args, {}, info),
-    updateManyPosts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyPosts', args, {}, info),
-    updateManyProfiles: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyProfiles', args, {}, info),
-    updateManyTokens: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyTokens', args, {}, info),
-    updateManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'updateManyUsers', args, {}, info),
-    deleteManyPosts: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyPosts', args, {}, info),
-    deleteManyProfiles: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyProfiles', args, {}, info),
-    deleteManyTokens: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyTokens', args, {}, info),
-    deleteManyUsers: (args, info): Promise<BatchPayload> => super.delegate('mutation', 'deleteManyUsers', args, {}, info)
-  }
-
-  subscription: Subscription = {
-    post: (args, infoOrQuery): Promise<AsyncIterator<PostSubscriptionPayload>> => super.delegateSubscription('post', args, {}, infoOrQuery),
-    profile: (args, infoOrQuery): Promise<AsyncIterator<ProfileSubscriptionPayload>> => super.delegateSubscription('profile', args, {}, infoOrQuery),
-    token: (args, infoOrQuery): Promise<AsyncIterator<TokenSubscriptionPayload>> => super.delegateSubscription('token', args, {}, infoOrQuery),
-    user: (args, infoOrQuery): Promise<AsyncIterator<UserSubscriptionPayload>> => super.delegateSubscription('user', args, {}, infoOrQuery)
-  }
-}
+export type DateTime = Date | string
